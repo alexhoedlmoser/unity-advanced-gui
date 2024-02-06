@@ -4,9 +4,25 @@
   "displayName": "Advanced GUI",
   "description": "This package includes advanced and animated GUI elements for Unity",
   "unity": "2022.3",
+  "dependencies": {
+    "com.unity.ugui": "1.0.0",
+    "com.unity.textmeshpro": "3.0.6"
+  },
   "author": {
     "name": "Alexander Hödlmoser",
     "email": "alex.hoedlmoser@gmail.com",
     "url": ""
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Scenes",
+      "description": "Contains sample scenes showcasing how multiple AdvancedGUI components can be used.",
+      "path": "Samples/Scenes"
+    },
+    {
+      "displayName": "Prefabs",
+      "description": "Contains prefabs that already hav AdvancedGUI components fully setup, like buttons, toggles and sliders",
+      "path": "Samples/Prefabs"
+    }
+  ]
 }
