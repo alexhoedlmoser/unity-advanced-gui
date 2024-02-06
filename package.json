@@ -1,0 +1,12 @@
+{
+  "name": "com.alexhoedlmoser.advanced-gui",
+  "version": "0.0.1",
+  "displayName": "Advanced GUI",
+  "description": "This package includes advanced and animated GUI elements for Unity",
+  "unity": "2022.3",
+  "author": {
+    "name": "Alexander Hödlmoser",
+    "email": "alex.hoedlmoser@gmail.com",
+    "url": ""
+  }
+}
