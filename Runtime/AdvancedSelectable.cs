@@ -20,7 +20,7 @@ namespace AlexH.AdvancedGUI
         
         [Header("Settings")]
         [SerializeField] private SelectableSettingsObject settingsObject;
-        [SerializeField] private bool useUniversalHighlight;
+        public bool useUniversalHighlight;
         [SerializeField] private bool useIconInsteadOfLabel;
         
         private Color _defaultColor;
@@ -30,8 +30,12 @@ namespace AlexH.AdvancedGUI
         private Color _defaultLabelColor;
         private Color _hoverLabelColor;
 
+        private RectTransform _rectTransform;
+
         protected virtual void Start()
         {
+            _rectTransform = GetComponent<RectTransform>();
+            
             LoadSettings();
             InitializeSelectable();
         }
