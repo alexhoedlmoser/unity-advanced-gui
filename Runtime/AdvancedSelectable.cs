@@ -14,27 +14,31 @@ namespace AlexH.AdvancedGUI
         public event Action<AdvancedSelectable, bool> OnHover;
         
         [Header("References")] 
-        [SerializeField] private Image backgroundImage;
-        [SerializeField] private Image icon;
+        [SerializeField] protected Image backgroundImage;
+        [SerializeField] protected Image icon;
         [SerializeField] protected TMP_Text label;
         
         [Header("Settings")]
         [SerializeField] private SelectableSettingsObject settingsObject;
         public bool useUniversalHighlight;
-        [SerializeField] private bool useIconInsteadOfLabel;
+        [SerializeField] protected bool useIconInsteadOfLabel;
         
-        private Color _defaultColor;
-        private Color _hoverColor;
-        private Color _pressedColor;
-        private Color _disabledColor;
-        private Color _defaultLabelColor;
-        private Color _hoverLabelColor;
+        protected Color _defaultColor;
+        protected Color _hoverColor;
+        protected Color _pressedColor;
+        protected Color _disabledColor;
+        protected Color _defaultLabelColor;
+        protected Color _hoverLabelColor;
 
-        private RectTransform _rectTransform;
+        protected float _defaultLabelCharacterSpacing;
+
+        protected RectTransform _rectTransform;
+        protected RectTransform _backgroundTransform;
 
         protected virtual void Start()
         {
             _rectTransform = GetComponent<RectTransform>();
+            _backgroundTransform = backgroundImage.GetComponent<RectTransform>();
             
             LoadSettings();
             InitializeSelectable();
@@ -52,16 +56,13 @@ namespace AlexH.AdvancedGUI
             if (settingsObject.fontAsset) {label.font = settingsObject.fontAsset;}
             label.fontSize = settingsObject.fontSize;
             _defaultLabelColor = settingsObject.defaultTextColor;
-            _defaultLabelColor = settingsObject.hoverTextColor;
+            _hoverLabelColor = settingsObject.hoverTextColor;
+
+            _defaultLabelCharacterSpacing = settingsObject.characterSpacing;
             
             //frame
             if (settingsObject.useRoundedCorners)
             {
-                if (!backgroundImage)
-                {
-                    backgroundImage = GetComponent<Image>();
-                }
-                
                 backgroundImage.sprite = settingsObject.roundedCornersSprite;
                 backgroundImage.type = Image.Type.Tiled;
                 backgroundImage.pixelsPerUnitMultiplier = settingsObject.cornerRoundness;
@@ -87,27 +88,22 @@ namespace AlexH.AdvancedGUI
             else
             {
                 label.color = _defaultLabelColor;
+                label.characterSpacing = _defaultLabelCharacterSpacing;
             }
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public virtual void OnPointerEnter(PointerEventData eventData)
         {
             OnHover?.Invoke(this, true);
-            backgroundImage.DOColor(_hoverColor, 0.1f);
         }
         
-        public void OnPointerExit(PointerEventData eventData)
+        public virtual void OnPointerExit(PointerEventData eventData)
         {
             OnHover?.Invoke(this, false);
-            backgroundImage.DOColor(_defaultColor, 0.1f);
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public virtual void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button != PointerEventData.InputButton.Left)
-            {
-                return;
-            }
         }
     }
 }

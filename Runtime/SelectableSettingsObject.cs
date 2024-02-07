@@ -25,6 +25,7 @@ namespace AlexH.AdvancedGUI
         [Header("Text")] 
         public TMP_FontAsset fontAsset;
         public float fontSize = 36f;
+        public float characterSpacing;
         public Color defaultTextColor = Color.black;
         public Color hoverTextColor = Color.black;
 

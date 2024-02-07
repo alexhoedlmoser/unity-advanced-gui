@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc03bd344afe43b4ab0bc396f428f4bc, type: 3}
   m_Name: DefaultButtonDark
   m_EditorClassIdentifier: 
-  defaultColor: {r: 0.14899999, g: 0.14899999, b: 0.14899999, a: 0.101960786}
-  hoverColor: {r: 0.25, g: 0.25, b: 0.25, a: 0.2509804}
+  defaultColor: {r: 0.1936508, g: 0.2, b: 0.17777778, a: 1}
+  hoverColor: {r: 0.6752212, g: 0.7, b: 0.6163717, a: 1}
   pressedColor: {r: 0, g: 1, b: 1, a: 1}
   disabledColor: {r: 0, g: 0, b: 0, a: 1}
   defaultSprite: {fileID: 0}
   useRoundedCorners: 1
   roundedCornersSprite: {fileID: 21300000, guid: 7e6cbc576a29d1e4dae1caf8b272bdcd, type: 3}
   cornerRoundness: 7
-  fontAsset: {fileID: 11400000, guid: bd54064dea200414aa08aa6f83228608, type: 2}
-  fontSize: 36
-  defaultTextColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
-  hoverTextColor: {r: 1, g: 1, b: 1, a: 1}
+  fontAsset: {fileID: 11400000, guid: 8f3d5cd347e3f974aa12a4ff92d369bd, type: 2}
+  fontSize: 24
+  characterSpacing: 5
+  defaultTextColor: {r: 0.8547502, g: 0.8867924, b: 0.78221786, a: 1}
+  hoverTextColor: {r: 0, g: 0, b: 0, a: 1}
   transitionType: 0
   transitionDuration: 0

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using static AlexH.Helper;
 
 namespace AlexH.AdvancedGUI
 {
@@ -67,6 +68,11 @@ namespace AlexH.AdvancedGUI
             }
         }
 
+        private void OnDestroy()
+        {
+            _currentSequence?.Kill();
+        }
+
         private void OnHoverHandler(AdvancedSelectable selectable, bool hover)
         {
             //print(selectable.name + " Hover: " + hover);
@@ -101,21 +107,15 @@ namespace AlexH.AdvancedGUI
 
         private Sequence AnimateTo(RectTransform rectTransform)
         {
-            _rectTransform.sizeDelta = GetPaddedSize(rectTransform, transitionSizeDelta);
-            Vector2 endSize = GetPaddedSize(rectTransform, endSizeDelta);
+            _rectTransform.sizeDelta = GetPaddedSize(rectTransform.sizeDelta, transitionSizeDelta);
+            Vector2 endSize = GetPaddedSize(rectTransform.sizeDelta, endSizeDelta);
 
             return DOTween.Sequence()
                 .Append(_canvasGroup.DOFade(endAlpha, animationDuration).SetEase(Ease.Linear))
                 .Join(_rectTransform.DOSizeDelta(endSize, animationDuration).SetEase(Ease.OutCubic))
                 .Join(_rectTransform.DOMove(rectTransform.position, animationDuration).SetEase(Ease.OutCubic))
-                .Append(_rectTransform.DOSizeDelta(GetPaddedSize(rectTransform, transitionSizeDelta * 1/bounceStrength), bounceDuration/2).SetEase(Ease.OutCubic))
+                .Append(_rectTransform.DOSizeDelta(GetPaddedSize(rectTransform.sizeDelta, transitionSizeDelta * 1/bounceStrength), bounceDuration/2).SetEase(Ease.OutCubic))
                 .Append(_rectTransform.DOSizeDelta(endSize, bounceDuration/2).SetEase(Ease.InCubic));
-        }
-
-        private Vector2 GetPaddedSize(RectTransform rectTransform, float padding)
-        {
-            Vector2 size = rectTransform.sizeDelta;
-            return new Vector2(size.x + padding, size.y + padding);
         }
 
         private void SetTo(Vector3 position)
