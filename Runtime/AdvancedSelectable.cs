@@ -14,72 +14,88 @@ namespace AlexH.AdvancedGUI
         public event Action<AdvancedSelectable, bool> OnHover;
         
         [Header("References")] 
-        [SerializeField] private Image hoverImage;
-        [SerializeField] private TMP_Text label;
-
-        [Header("Colors")]
-        [SerializeField] private Color defaultColor;
-        [SerializeField] private Color hoverColor;
-        [SerializeField] private Color pressedColor;
-        [SerializeField] private Color disabledColor;
-        [Space] 
-        [SerializeField] private Color defaultLabelColor;
-        [SerializeField] private Color hoverLabelColor;
-
-        [Header("Settings")] 
+        [SerializeField] private Image backgroundImage;
+        [SerializeField] private Image icon;
+        [SerializeField] protected TMP_Text label;
+        
+        [Header("Settings")]
+        [SerializeField] private SelectableSettingsObject settingsObject;
         [SerializeField] private bool useUniversalHighlight;
-        [SerializeField] private bool useManagedColors = true;
-        [SerializeField] private bool useManagedTextForLabel = true;
+        [SerializeField] private bool useIconInsteadOfLabel;
+        
+        private Color _defaultColor;
+        private Color _hoverColor;
+        private Color _pressedColor;
+        private Color _disabledColor;
+        private Color _defaultLabelColor;
+        private Color _hoverLabelColor;
 
-        private AdvancedGUIManager _manager;
-        
-        
         protected virtual void Start()
         {
-            _manager = AdvancedGUIManager.Instance;
-            LoadPropertiesFromManager();
+            LoadSettings();
             InitializeSelectable();
         }
         
-        private void LoadPropertiesFromManager()
+        private void LoadSettings()
         {
-            if (!_manager) return;
+            //colors
+            _defaultColor = settingsObject.defaultColor;
+            _hoverColor = settingsObject.hoverColor;
+            _pressedColor = settingsObject.pressedColor;
+            _disabledColor = settingsObject.disabledColor;
+
+            //text label
+            if (settingsObject.fontAsset) {label.font = settingsObject.fontAsset;}
+            label.fontSize = settingsObject.fontSize;
+            _defaultLabelColor = settingsObject.defaultTextColor;
+            _defaultLabelColor = settingsObject.hoverTextColor;
             
-            if (useManagedColors)
+            //frame
+            if (settingsObject.useRoundedCorners)
             {
-                defaultColor =_manager.defaultColor;
-                hoverColor = _manager.hoverColor;
-                pressedColor = _manager.pressedColor;
-                disabledColor = _manager.disabledColor;
-            }
-
-            if (useManagedTextForLabel)
-            {
-                if (_manager.fontAsset) {label.font = _manager.fontAsset;}
+                if (!backgroundImage)
+                {
+                    backgroundImage = GetComponent<Image>();
+                }
                 
-                label.fontSize = _manager.fontSize;
-
-                defaultLabelColor = _manager.defaultTextColor;
-                defaultLabelColor = _manager.hoverTextColor;
+                backgroundImage.sprite = settingsObject.roundedCornersSprite;
+                backgroundImage.type = Image.Type.Tiled;
+                backgroundImage.pixelsPerUnitMultiplier = settingsObject.cornerRoundness;
             }
+            else
+            {
+                backgroundImage.sprite = settingsObject.defaultSprite;
+            }
+            
+            // icon or label
+            label.gameObject.SetActive(!useIconInsteadOfLabel);
+            icon.gameObject.SetActive(useIconInsteadOfLabel);
         }
 
-        private void InitializeSelectable()
+        protected virtual void InitializeSelectable()
         {
-            hoverImage.color = defaultColor;
-            label.color = defaultLabelColor;
+            backgroundImage.color = _defaultColor;
+            
+            if (useIconInsteadOfLabel)
+            {
+                icon.color = _defaultLabelColor;
+            }
+            else
+            {
+                label.color = _defaultLabelColor;
+            }
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
             OnHover?.Invoke(this, true);
-            hoverImage.DOColor(hoverColor, 0.1f);
+            backgroundImage.DOColor(_hoverColor, 0.1f);
         }
         
         public void OnPointerExit(PointerEventData eventData)
         {
             OnHover?.Invoke(this, false);
-            hoverImage.DOColor(defaultColor, 0.1f);
+            backgroundImage.DOColor(_defaultColor, 0.1f);
         }
 
         public void OnPointerClick(PointerEventData eventData)

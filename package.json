@@ -6,6 +6,7 @@
   "unity": "2022.3",
   "dependencies": {
     "com.unity.ugui": "1.0.0",
+    "com.unity.2d.sprite" : "1.0.0",
     "com.unity.textmeshpro": "3.0.6",
     "com.lrs.tools": "1.0.0"
   },
