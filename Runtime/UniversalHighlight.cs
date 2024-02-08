@@ -17,7 +17,8 @@ namespace AlexH.AdvancedGUI
         [Header("Settings")]
         [SerializeField] private float animationDuration = 0.2f;
         [SerializeField] private float bounceDuration = 0.1f;
-        [SerializeField] private float bounceStrength = 3;
+        [Range(0.0f, 1f)] 
+        [SerializeField] private float bounceStrength = 0.25f;
         [SerializeField] private float fadeDuration = 0.1f;
         
         [SerializeField] private float transitionSizeDelta = 50f;
@@ -114,8 +115,8 @@ namespace AlexH.AdvancedGUI
                 .Append(_canvasGroup.DOFade(endAlpha, animationDuration).SetEase(Ease.Linear))
                 .Join(_rectTransform.DOSizeDelta(endSize, animationDuration).SetEase(Ease.OutCubic))
                 .Join(_rectTransform.DOMove(rectTransform.position, animationDuration).SetEase(Ease.OutCubic))
-                .Append(_rectTransform.DOSizeDelta(GetPaddedSize(rectTransform.sizeDelta, transitionSizeDelta * 1/bounceStrength), bounceDuration/2).SetEase(Ease.OutCubic))
-                .Append(_rectTransform.DOSizeDelta(endSize, bounceDuration/2).SetEase(Ease.InCubic));
+                .Append(_rectTransform.DOSizeDelta(GetPaddedSize(rectTransform.sizeDelta, transitionSizeDelta * bounceStrength), bounceDuration/2).SetEase(Ease.OutQuint))
+                .Append(_rectTransform.DOSizeDelta(endSize, bounceDuration/2).SetEase(Ease.InQuint));
         }
 
         private void SetTo(Vector3 position)

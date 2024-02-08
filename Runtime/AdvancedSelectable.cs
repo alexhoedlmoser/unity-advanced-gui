@@ -6,12 +6,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using static AlexH.Helper;
 
 namespace AlexH.AdvancedGUI
 {
     public class AdvancedSelectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         public event Action<AdvancedSelectable, bool> OnHover;
+
+        [Header("Input")] 
+        [SerializeField] private string labelText;
+        [SerializeField] private Sprite iconSprite;
         
         [Header("References")] 
         [SerializeField] protected Image backgroundImage;
@@ -19,91 +24,183 @@ namespace AlexH.AdvancedGUI
         [SerializeField] protected TMP_Text label;
         
         [Header("Settings")]
-        [SerializeField] private SelectableSettingsObject settingsObject;
+        [SerializeField] protected SelectableStylingObject stylingObject;
         public bool useUniversalHighlight;
         [SerializeField] protected bool useIconInsteadOfLabel;
+
+        #region Style Properties
+
+        protected Color defaultColor;
+        protected Color hoverColor;
+        protected Color pressedColor;
+        protected Color disabledColor;
+        protected Color defaultContentColor;
+        protected Color hoverContentColor;
+
+        protected FontWeight defaultFontWeight;
+        protected FontWeight hoverFontWeight;
+        protected FontWeight clickedFontWeight;
+
+        protected float defaultLabelCharacterSpacing;
+        protected float hoverLabelCharacterSpacing;
         
-        protected Color _defaultColor;
-        protected Color _hoverColor;
-        protected Color _pressedColor;
-        protected Color _disabledColor;
-        protected Color _defaultLabelColor;
-        protected Color _hoverLabelColor;
+        protected float hoverSizeDelta;
+        protected float hoverTransitionDuration;
 
-        protected float _defaultLabelCharacterSpacing;
-
-        protected RectTransform _rectTransform;
-        protected RectTransform _backgroundTransform;
+        #endregion
+        
+        protected RectTransform rectTransform;
+        protected RectTransform backgroundTransform;
+        private Vector2 _defaultSize;
+        
+        private Sequence _currentHoverSequence;
+        private Coroutine _characterSpacingTween;
 
         protected virtual void Start()
         {
-            _rectTransform = GetComponent<RectTransform>();
-            _backgroundTransform = backgroundImage.GetComponent<RectTransform>();
+            rectTransform = GetComponent<RectTransform>();
+            backgroundTransform = backgroundImage.GetComponent<RectTransform>();
+            _defaultSize = backgroundTransform.sizeDelta;
             
-            LoadSettings();
+            LoadStyle();
             InitializeSelectable();
         }
         
-        private void LoadSettings()
+        protected virtual void LoadStyle()
         {
-            //colors
-            _defaultColor = settingsObject.defaultColor;
-            _hoverColor = settingsObject.hoverColor;
-            _pressedColor = settingsObject.pressedColor;
-            _disabledColor = settingsObject.disabledColor;
-
-            //text label
-            if (settingsObject.fontAsset) {label.font = settingsObject.fontAsset;}
-            label.fontSize = settingsObject.fontSize;
-            _defaultLabelColor = settingsObject.defaultTextColor;
-            _hoverLabelColor = settingsObject.hoverTextColor;
-
-            _defaultLabelCharacterSpacing = settingsObject.characterSpacing;
-            
-            //frame
-            if (settingsObject.useRoundedCorners)
+            #region Frame
+            if (stylingObject.useRoundedCorners)
             {
-                backgroundImage.sprite = settingsObject.roundedCornersSprite;
+                backgroundImage.sprite = stylingObject.roundedCornersSprite;
                 backgroundImage.type = Image.Type.Tiled;
-                backgroundImage.pixelsPerUnitMultiplier = settingsObject.cornerRoundness;
+                backgroundImage.pixelsPerUnitMultiplier = stylingObject.GetPixelMultiplierForRoundness();
             }
             else
             {
-                backgroundImage.sprite = settingsObject.defaultSprite;
+                backgroundImage.sprite = stylingObject.defaultSprite;
             }
             
-            // icon or label
-            label.gameObject.SetActive(!useIconInsteadOfLabel);
-            icon.gameObject.SetActive(useIconInsteadOfLabel);
+            defaultColor = stylingObject.defaultColor;
+            hoverColor = stylingObject.hoverColor;
+            pressedColor = stylingObject.pressedColor;
+            disabledColor = stylingObject.disabledColor;
+            
+            hoverSizeDelta = stylingObject.hoverSizeDelta;
+            hoverTransitionDuration = stylingObject.hoverTransitionDuration;
+            #endregion
+
+            #region Label
+            if (stylingObject.textFontAsset) {label.font = stylingObject.textFontAsset;}
+            label.fontSizeMax = stylingObject.fontSize;
+            defaultFontWeight = stylingObject.defaultFontWeight;
+            hoverFontWeight = stylingObject.hoverFontWeight;
+            clickedFontWeight = stylingObject.clickedFontWeight;
+            defaultLabelCharacterSpacing = stylingObject.defaultCharacterSpacing;
+            hoverLabelCharacterSpacing = stylingObject.hoverLabelCharacterSpacing;
+            
+            defaultContentColor = stylingObject.defaultContentColor;
+            hoverContentColor = stylingObject.hoverContentColor;
+            #endregion
         }
 
         protected virtual void InitializeSelectable()
         {
-            backgroundImage.color = _defaultColor;
+            // icon or label
+            label.gameObject.SetActive(!useIconInsteadOfLabel);
+            icon.gameObject.SetActive(useIconInsteadOfLabel);
+
+            label.text = labelText;
+            icon.sprite = iconSprite;
             
-            if (useIconInsteadOfLabel)
-            {
-                icon.color = _defaultLabelColor;
-            }
-            else
-            {
-                label.color = _defaultLabelColor;
-                label.characterSpacing = _defaultLabelCharacterSpacing;
-            }
+            DefaultState();
         }
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
             OnHover?.Invoke(this, true);
+            HoverState(true);
         }
         
         public virtual void OnPointerExit(PointerEventData eventData)
         {
             OnHover?.Invoke(this, false);
+            HoverState(false);
         }
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
+        }
+
+        protected virtual void DefaultState()
+        {
+            backgroundImage.color = defaultColor;
+            
+            if (useIconInsteadOfLabel)
+            {
+                icon.color = defaultContentColor;
+            }
+            else
+            {
+                label.color = defaultContentColor;
+                label.characterSpacing = defaultLabelCharacterSpacing;
+                label.fontWeight = defaultFontWeight;
+            }
+        }
+
+        protected virtual void HoverState(bool hover)
+        {
+            if (hover)
+            {
+                icon.color =  hoverContentColor;
+                label.color = hoverContentColor;
+                label.fontWeight = hoverFontWeight;
+            }
+            else
+            {
+                DefaultState();
+            }
+            
+            _currentHoverSequence?.Kill();
+            _currentHoverSequence = HoverSequence(hover);
+        }
+        
+        protected Sequence HoverSequence(bool hover)
+        {
+            Sequence sequence;
+            if (hover)
+            {
+                sequence =  DOTween.Sequence()
+                    .Append(backgroundTransform.DOSizeDelta(GetPaddedSize(_defaultSize, hoverSizeDelta), hoverTransitionDuration).SetEase(Ease.OutCubic))
+                    .Join(backgroundImage.DOColor(hoverColor, hoverTransitionDuration).SetEase(Ease.Linear));
+
+                // sequence.Join(useIconInsteadOfLabel
+                //     ? icon.DOColor(_hoverLabelColor, hoverTransitionDuration).SetEase(Ease.Linear)
+                //     : label.DOColor(_hoverLabelColor, hoverTransitionDuration).SetEase(Ease.Linear));
+
+                if (_characterSpacingTween != null)
+                {
+                    StopCoroutine(_characterSpacingTween);
+                }
+                _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, hoverLabelCharacterSpacing, hoverTransitionDuration));
+            }
+            else
+            {
+                sequence =  DOTween.Sequence()
+                    .Append(backgroundTransform.DOSizeDelta(_defaultSize, hoverTransitionDuration).SetEase(Ease.OutCubic))
+                    .Join(backgroundImage.DOColor(defaultColor, hoverTransitionDuration).SetEase(Ease.Linear));
+
+                // sequence.Join(useIconInsteadOfLabel
+                //     ? icon.DOColor(_defaultLabelColor, hoverTransitionDuration).SetEase(Ease.Linear)
+                //     : label.DOColor(_defaultLabelColor, hoverTransitionDuration).SetEase(Ease.Linear));
+
+                if (_characterSpacingTween != null)
+                {
+                    StopCoroutine(_characterSpacingTween);
+                }
+                _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, defaultLabelCharacterSpacing, hoverTransitionDuration));
+            }
+
+            return sequence;
         }
     }
 }

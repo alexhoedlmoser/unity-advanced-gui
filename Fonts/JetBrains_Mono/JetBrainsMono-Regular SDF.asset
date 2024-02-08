@@ -5671,8 +5671,8 @@ MonoBehaviour:
     italicTypeface: {fileID: 11400000, guid: b6405f1339a719c41bb40d540839128f, type: 2}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 11400000, guid: 5de73648b869b8a468ce5a1e75027633, type: 2}
+    italicTypeface: {fileID: 11400000, guid: 6f3d29a95773b134989ee43040246471, type: 2}
   fontWeights: []
   normalStyle: 0
   normalSpacingOffset: 0
