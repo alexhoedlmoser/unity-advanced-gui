@@ -95,6 +95,20 @@ namespace AlexH
             _currentSliderHoverSequence = SliderHoverSequence(hover);
         }
 
+        protected override void ClickedState(bool clicked)
+        {
+            base.ClickedState(clicked);
+
+            if (clicked)
+            {
+                RecolorImageWithAlpha(sliderHandleImage, pressedColor, 1f);
+            }
+            else
+            {
+                RecolorImageWithAlpha(sliderHandleImage, hoverColor, 1f);
+            }
+        }
+
         private Sequence SliderHoverSequence(bool hover)
         {
             Sequence sequence;

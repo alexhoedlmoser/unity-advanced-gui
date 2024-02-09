@@ -15,13 +15,7 @@ namespace AlexH.AdvancedGUI{
 
         [Header("References")] 
         [SerializeField] private Image clickImage;
-
-        public override void OnPointerClick(PointerEventData eventData)
-        {
-            base.OnPointerClick(eventData);
-        }
-
-       
+        
     }
 }
 

@@ -10,9 +10,10 @@ using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
 {
-    public class AdvancedSelectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    public class AdvancedSelectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
     {
         public event Action<AdvancedSelectable, bool> OnHover;
+        public event Action<AdvancedSelectable, bool> OnPressed;
 
         [Header("Input")] 
         [SerializeField] private string labelText;
@@ -47,6 +48,8 @@ namespace AlexH.AdvancedGUI
         
         protected float hoverSizeDelta;
         protected float hoverTransitionDuration;
+        protected float clickedSizeDelta = 50f;
+        protected float clickedTransitionDuration = 0.05f;
 
         #endregion
         
@@ -54,8 +57,10 @@ namespace AlexH.AdvancedGUI
         protected RectTransform backgroundTransform;
         private Vector2 _defaultSize;
         
-        private Sequence _currentHoverSequence;
+        private Sequence _currentSequence;
         private Coroutine _characterSpacingTween;
+
+        private bool _isPressed;
 
         #region Getter
 
@@ -67,6 +72,11 @@ namespace AlexH.AdvancedGUI
         public Color GetHoverColor()
         {
             return hoverColor;
+        }
+        
+        public Color GetPressedColor()
+        {
+            return pressedColor;
         }
 
         #endregion
@@ -131,20 +141,48 @@ namespace AlexH.AdvancedGUI
             DefaultState();
         }
 
-        public virtual void OnPointerEnter(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData)
         {
             OnHover?.Invoke(this, true);
             HoverState(true);
         }
         
-        public virtual void OnPointerExit(PointerEventData eventData)
+        public void OnPointerExit(PointerEventData eventData)
         {
             OnHover?.Invoke(this, false);
+           
+            if (_isPressed)
+            {
+                ClickedState(false);
+                _isPressed = false;
+            }
+           
             HoverState(false);
+            
         }
 
-        public virtual void OnPointerClick(PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
+            
+        }
+        
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (eventData.button != PointerEventData.InputButton.Left) return;
+            OnPressed?.Invoke(this, true);
+
+            ClickedState(true);
+            _isPressed = true;
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (!_isPressed) return;
+            
+            OnPressed?.Invoke(this, false);
+            ClickedState(false);
+            _isPressed = false;
+
         }
 
         protected virtual void DefaultState()
@@ -178,16 +216,22 @@ namespace AlexH.AdvancedGUI
                 DefaultState();
             }
             
-            _currentHoverSequence?.Kill();
-            _currentHoverSequence = HoverSequence(hover);
+            _currentSequence?.Kill();
+            _currentSequence = HoverSequence(hover);
+        }
+
+        protected virtual void ClickedState(bool clicked)
+        {
+            _currentSequence?.Kill();
+            _currentSequence = ClickedSequence(clicked);
         }
         
         protected Sequence HoverSequence(bool hover)
         {
-            Sequence sequence;
+            Sequence sequence = DOTween.Sequence();
             if (hover)
             {
-                sequence =  DOTween.Sequence()
+                sequence
                     .Append(backgroundTransform.DOSizeDelta(GetPaddedSize(_defaultSize, hoverSizeDelta), hoverTransitionDuration).SetEase(Ease.OutCubic))
                     .Join(backgroundImage.DOColor(hoverColor, hoverTransitionDuration).SetEase(Ease.Linear));
 
@@ -203,7 +247,7 @@ namespace AlexH.AdvancedGUI
             }
             else
             {
-                sequence =  DOTween.Sequence()
+                sequence
                     .Append(backgroundTransform.DOSizeDelta(_defaultSize, hoverTransitionDuration).SetEase(Ease.OutCubic))
                     .Join(backgroundImage.DOColor(defaultColor, hoverTransitionDuration).SetEase(Ease.Linear));
 
@@ -216,6 +260,31 @@ namespace AlexH.AdvancedGUI
                     StopCoroutine(_characterSpacingTween);
                 }
                 _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, defaultLabelCharacterSpacing, hoverTransitionDuration));
+            }
+
+            return sequence;
+        }
+
+        private Sequence ClickedSequence(bool clicked)
+        {
+            Sequence sequence = DOTween.Sequence();
+
+            if (clicked)
+            {
+                sequence
+                    .Append(backgroundTransform
+                        .DOSizeDelta(GetPaddedSize(_defaultSize, clickedSizeDelta), clickedTransitionDuration/2)
+                        .SetEase(Ease.OutCubic))
+                    .Join(backgroundImage.DOColor(pressedColor, clickedTransitionDuration/2).SetEase(Ease.Linear));
+            }
+
+            else
+            {
+                sequence
+                    .Append(backgroundTransform
+                        .DOSizeDelta(GetPaddedSize(_defaultSize, hoverSizeDelta), clickedTransitionDuration*2)
+                        .SetEase(Ease.InQuart))
+                    .Join(backgroundImage.DOColor(hoverColor, clickedTransitionDuration*2).SetEase(Ease.Linear));
             }
 
             return sequence;
