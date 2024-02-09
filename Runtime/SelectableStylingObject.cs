@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static AlexH.Helper;
+using static AlexH.AdvancedGUI.Helper;
 
 
 namespace AlexH.AdvancedGUI
@@ -32,7 +32,8 @@ namespace AlexH.AdvancedGUI
         public float fontSize = 36f;
         public FontWeight defaultFontWeight;
         public FontWeight hoverFontWeight;
-        public FontWeight clickedFontWeight;
+        public FontStyles defaultFontStyle;
+        public FontStyles hoverFontStyle;
         public float defaultCharacterSpacing;
         
         [Header("Animation Properties")]

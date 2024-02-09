@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -5,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AlexH
+namespace AlexH.AdvancedGUI
 {
     public static class Helper
     {
@@ -98,6 +99,66 @@ namespace AlexH
             tmpColor.a = alpha;
             
             image.color = tmpColor;
+        }
+
+        public static void SetImageAlpha(Image image, float alpha)
+        {
+            Color tmpColor = image.color;
+            tmpColor.a = alpha;
+            
+            image.color = tmpColor;
+        }
+        
+        public static Vector4 GetPaddingFromGradient(GradientType gradient, float padding)
+        {
+            Vector4 paddingVector = Vector4.zero;
+
+            switch (gradient)
+            {
+                case GradientType.LeftToRight:
+                    paddingVector = new Vector4(padding, 0, 0, 0);
+                    break;
+                case GradientType.RightToLeft:
+                    paddingVector = new Vector4(0, 0, padding, 0);
+                    break;
+                case GradientType.TopToBottom:
+                    paddingVector = new Vector4(0, 0, 0, padding);
+                    break;
+                case GradientType.BottomToTop:
+                    paddingVector = new Vector4(0, padding, 0, 0);
+                    break;
+                case GradientType.None:
+                default:
+                    break;
+            }
+
+            return paddingVector;
+        }
+
+        public static Vector2Int GetSoftnessFromGradient(GradientType gradientType, Vector2 objectSize, float softness0To1)
+        {
+            Vector2Int softnessVector = Vector2Int.zero;
+
+            int softness;
+            
+            switch (gradientType)
+            {
+                case GradientType.LeftToRight:
+                case GradientType.RightToLeft:
+                    softness = Mathf.RoundToInt(RemapRange(softness0To1, 0, 1, 0, objectSize.x*2));
+                    softnessVector = new Vector2Int(softness, 0);
+                    break;
+                case GradientType.BottomToTop:
+                case GradientType.TopToBottom:
+                    softness = Mathf.RoundToInt(RemapRange(softness0To1, 0, 1, 0, objectSize.y*2));
+                    softnessVector = new Vector2Int(0, softness);
+                    break;
+                case GradientType.None:
+                default:
+                    break;
+            }
+
+            return softnessVector;
         }
     }
 }

@@ -6,7 +6,7 @@ using TreeEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static AlexH.Helper;
+using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI{
     public class AdvancedButton : AdvancedSelectable

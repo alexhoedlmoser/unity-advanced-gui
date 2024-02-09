@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
-using static AlexH.Helper;
+using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
 {
@@ -39,7 +39,8 @@ namespace AlexH.AdvancedGUI
 
         protected FontWeight defaultFontWeight;
         protected FontWeight hoverFontWeight;
-        protected FontWeight clickedFontWeight;
+        protected FontStyles defaultFontStyle;
+        protected FontStyles hoverFontStyle;
 
         protected float defaultLabelCharacterSpacing;
         protected float hoverLabelCharacterSpacing;
@@ -55,6 +56,20 @@ namespace AlexH.AdvancedGUI
         
         private Sequence _currentHoverSequence;
         private Coroutine _characterSpacingTween;
+
+        #region Getter
+
+        public Color GetDefaultColor()
+        {
+            return defaultColor;
+        }
+        
+        public Color GetHoverColor()
+        {
+            return hoverColor;
+        }
+
+        #endregion
 
         protected virtual void Start()
         {
@@ -94,7 +109,8 @@ namespace AlexH.AdvancedGUI
             label.fontSizeMax = stylingObject.fontSize;
             defaultFontWeight = stylingObject.defaultFontWeight;
             hoverFontWeight = stylingObject.hoverFontWeight;
-            clickedFontWeight = stylingObject.clickedFontWeight;
+            defaultFontStyle = stylingObject.defaultFontStyle;
+            hoverFontStyle = stylingObject.hoverFontStyle;
             defaultLabelCharacterSpacing = stylingObject.defaultCharacterSpacing;
             hoverLabelCharacterSpacing = stylingObject.hoverLabelCharacterSpacing;
             
@@ -144,6 +160,7 @@ namespace AlexH.AdvancedGUI
                 label.color = defaultContentColor;
                 label.characterSpacing = defaultLabelCharacterSpacing;
                 label.fontWeight = defaultFontWeight;
+                label.fontStyle = defaultFontStyle;
             }
         }
 
@@ -154,6 +171,7 @@ namespace AlexH.AdvancedGUI
                 icon.color =  hoverContentColor;
                 label.color = hoverContentColor;
                 label.fontWeight = hoverFontWeight;
+                label.fontStyle = hoverFontStyle;
             }
             else
             {
