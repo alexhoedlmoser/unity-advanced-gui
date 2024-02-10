@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DarkWhite
   m_EditorClassIdentifier: 
   defaultColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.7490196}
-  hoverColor: {r: 1, g: 1, b: 1, a: 0.9019608}
+  hoverColor: {r: 0.801, g: 0.801, b: 0.801, a: 0.9019608}
   pressedColor: {r: 1, g: 1, b: 1, a: 1}
   disabledColor: {r: 0, g: 0, b: 0, a: 1}
   defaultContentColor: {r: 1, g: 1, b: 1, a: 1}

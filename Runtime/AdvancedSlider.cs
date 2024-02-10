@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using AlexH.AdvancedGUI;
 using DG.Tweening;
 using TMPro;
@@ -33,10 +34,11 @@ namespace AlexH
         
         private RectTransform _sliderTransform;
         private Sequence _currentSliderHoverSequence;
+        private Image[] _allSliderImages;
 
         protected override void Start()
         {
-            //_sliderImages = slider.gameObject.GetComponentsInChildren<Image>();
+            _allSliderImages = slider.gameObject.GetComponentsInChildren<Image>();
             _sliderTransform = slider.gameObject.GetComponent<RectTransform>();
             _sliderDefaultSize = _sliderTransform.sizeDelta;
             UpdateValueText(slider.value);
@@ -130,6 +132,11 @@ namespace AlexH
 
             return sequence;
         }
-        
+
+        public override void OnPointerDown(PointerEventData eventData)
+        {
+            if (_allSliderImages.All(image => eventData.pointerEnter != image.gameObject)) return;
+            base.OnPointerDown(eventData);
+        }
     }
 }

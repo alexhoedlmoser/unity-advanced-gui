@@ -179,9 +179,10 @@ namespace AlexH.AdvancedGUI
             
         }
         
-        public void OnPointerDown(PointerEventData eventData)
+        public virtual void OnPointerDown(PointerEventData eventData)
         {
             if (eventData.button != PointerEventData.InputButton.Left) return;
+
             OnPressed?.Invoke(this, true);
 
             ClickedState(true);
