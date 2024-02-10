@@ -174,7 +174,7 @@ namespace AlexH.AdvancedGUI
             
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public virtual void OnPointerClick(PointerEventData eventData)
         {
             
         }
