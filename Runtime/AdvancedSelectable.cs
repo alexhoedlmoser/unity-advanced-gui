@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
@@ -80,6 +79,14 @@ namespace AlexH.AdvancedGUI
         }
 
         #endregion
+        
+        public void OnBeforeSerialize()
+        {
+            LoadStyle();
+            InitializeSelectable();
+            EditorUtility.SetDirty(gameObject);
+
+        }
 
         protected virtual void Start()
         {
@@ -94,6 +101,12 @@ namespace AlexH.AdvancedGUI
         protected virtual void LoadStyle()
         {
             #region Frame
+
+            if (!stylingObject)
+            {
+                return;
+            }
+            
             if (stylingObject.useRoundedCorners)
             {
                 backgroundImage.sprite = stylingObject.roundedCornersSprite;
@@ -189,17 +202,13 @@ namespace AlexH.AdvancedGUI
         {
             backgroundImage.color = defaultColor;
             
-            if (useIconInsteadOfLabel)
-            {
-                icon.color = defaultContentColor;
-            }
-            else
-            {
-                label.color = defaultContentColor;
-                label.characterSpacing = defaultLabelCharacterSpacing;
-                label.fontWeight = defaultFontWeight;
-                label.fontStyle = defaultFontStyle;
-            }
+            icon.color = defaultContentColor;
+            
+            label.color = defaultContentColor;
+            label.characterSpacing = defaultLabelCharacterSpacing;
+            label.fontWeight = defaultFontWeight;
+            label.fontStyle = defaultFontStyle;
+            
         }
 
         protected virtual void HoverState(bool hover)
