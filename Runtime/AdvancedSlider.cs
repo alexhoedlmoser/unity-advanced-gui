@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static AlexH.AdvancedGUI.Helper;
 
@@ -20,7 +21,7 @@ namespace AlexH
 
         [Header("References")] 
         [SerializeField] private Slider slider;
-        [SerializeField] private Image[] _sliderFrameImages;
+        [FormerlySerializedAs("_sliderFrameImages")] [SerializeField] private Image[] sliderFrameImages;
         [SerializeField] private Image sliderHandleImage;
         [SerializeField] private TMP_Text valueText;
 
@@ -36,22 +37,24 @@ namespace AlexH
         private Sequence _currentSliderHoverSequence;
         private Image[] _allSliderImages;
 
-        protected override void Start()
+        protected override void Awake()
         {
             _allSliderImages = slider.gameObject.GetComponentsInChildren<Image>();
             _sliderTransform = slider.gameObject.GetComponent<RectTransform>();
             _sliderDefaultSize = _sliderTransform.sizeDelta;
             UpdateValueText(slider.value);
             
-            base.Start();
+            base.Awake();
         }
 
         protected override void LoadStyle()
         {
             base.LoadStyle();
 
-            valueText.font = stylingObject.numbersFontAsset ? stylingObject.numbersFontAsset : stylingObject.textFontAsset;
-            valueText.fontSizeMax = stylingObject.fontSize;
+            if (!currentStyle) return;
+            
+            valueText.font = currentStyle.numbersFontAsset ? currentStyle.numbersFontAsset : currentStyle.textFontAsset;
+            valueText.fontSizeMax = currentStyle.fontSize;
         }
 
         public void UpdateValueText(float value)
@@ -64,13 +67,12 @@ namespace AlexH
             {
                 valueText.text = value.ToString(valueFormat, CultureInfo.InvariantCulture);
             }
-           
         }
 
         protected override void DefaultState()
         {
             base.DefaultState();
-            RecolorImagesWithAlpha(_sliderFrameImages, defaultContentColor, 1f);
+            RecolorImagesWithAlpha(sliderFrameImages, defaultContentColor, 1f);
             RecolorImageWithAlpha(sliderHandleImage, defaultColor, 1f);
             
             valueText.color = defaultContentColor;
@@ -83,7 +85,7 @@ namespace AlexH
 
             if (hover)
             {
-                RecolorImagesWithAlpha(_sliderFrameImages, hoverContentColor, 1f);
+                RecolorImagesWithAlpha(sliderFrameImages, hoverContentColor, 1f);
                 RecolorImageWithAlpha(sliderHandleImage, hoverColor, 1f);
                 valueText.color = hoverContentColor;
                 valueText.fontWeight = hoverFontWeight;
@@ -97,11 +99,11 @@ namespace AlexH
             _currentSliderHoverSequence = SliderHoverSequence(hover);
         }
 
-        protected override void ClickedState(bool clicked)
+        protected override void PressedState(bool pressed)
         {
-            base.ClickedState(clicked);
+            base.PressedState(pressed);
 
-            if (clicked)
+            if (pressed)
             {
                 RecolorImageWithAlpha(sliderHandleImage, pressedColor, 1f);
             }

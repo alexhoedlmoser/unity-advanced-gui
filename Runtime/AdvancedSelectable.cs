@@ -1,10 +1,12 @@
 using System;
+using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using UnityEditor;
+using UnityEngine.Serialization;
 using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
@@ -24,7 +26,7 @@ namespace AlexH.AdvancedGUI
         [SerializeField] protected TMP_Text label;
         
         [Header("Settings")]
-        [SerializeField] protected SelectableStylingObject stylingObject;
+        [SerializeField] protected SelectableStylingObject overrideStylingObject;
         public bool useUniversalHighlight;
         [SerializeField] protected bool useIconInsteadOfLabel;
 
@@ -36,6 +38,7 @@ namespace AlexH.AdvancedGUI
         protected Color disabledColor;
         protected Color defaultContentColor;
         protected Color hoverContentColor;
+        protected Color pressedContentColor;
 
         protected FontWeight defaultFontWeight;
         protected FontWeight hoverFontWeight;
@@ -58,6 +61,8 @@ namespace AlexH.AdvancedGUI
         
         private Sequence _currentSequence;
         private Coroutine _characterSpacingTween;
+
+        protected SelectableStylingObject currentStyle;
 
         private bool _isPressed;
 
@@ -85,15 +90,17 @@ namespace AlexH.AdvancedGUI
             LoadStyle();
             InitializeSelectable();
             EditorUtility.SetDirty(gameObject);
-
         }
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
             backgroundTransform = backgroundImage.GetComponent<RectTransform>();
             _defaultSize = backgroundTransform.sizeDelta;
-            
+        }
+
+        protected virtual void Start()
+        {
             LoadStyle();
             InitializeSelectable();
         }
@@ -102,44 +109,57 @@ namespace AlexH.AdvancedGUI
         {
             #region Frame
 
-            if (!stylingObject)
+            if (overrideStylingObject)
+            {
+                currentStyle = overrideStylingObject;
+            }
+            
+            if (!currentStyle)
             {
                 return;
             }
-            
-            if (stylingObject.useRoundedCorners)
+
+            if (currentStyle.useRoundedCorners)
             {
-                backgroundImage.sprite = stylingObject.roundedCornersSprite;
+                backgroundImage.sprite = currentStyle.roundedCornersSprite;
                 backgroundImage.type = Image.Type.Tiled;
-                backgroundImage.pixelsPerUnitMultiplier = stylingObject.GetPixelMultiplierForRoundness();
+                backgroundImage.pixelsPerUnitMultiplier = currentStyle.GetPixelMultiplierForRoundness();
             }
             else
             {
-                backgroundImage.sprite = stylingObject.defaultSprite;
+                backgroundImage.sprite = currentStyle.defaultSprite;
             }
             
-            defaultColor = stylingObject.defaultColor;
-            hoverColor = stylingObject.hoverColor;
-            pressedColor = stylingObject.pressedColor;
-            disabledColor = stylingObject.disabledColor;
+            defaultColor = currentStyle.defaultColor;
+            hoverColor = currentStyle.hoverColor;
+            pressedColor = currentStyle.pressedColor;
+            disabledColor = currentStyle.disabledColor;
             
-            hoverSizeDelta = stylingObject.hoverSizeDelta;
-            hoverTransitionDuration = stylingObject.hoverTransitionDuration;
+            hoverSizeDelta = currentStyle.hoverSizeDelta;
+            hoverTransitionDuration = currentStyle.hoverTransitionDuration;
             #endregion
 
             #region Label
-            if (stylingObject.textFontAsset) {label.font = stylingObject.textFontAsset;}
-            label.fontSizeMax = stylingObject.fontSize;
-            defaultFontWeight = stylingObject.defaultFontWeight;
-            hoverFontWeight = stylingObject.hoverFontWeight;
-            defaultFontStyle = stylingObject.defaultFontStyle;
-            hoverFontStyle = stylingObject.hoverFontStyle;
-            defaultLabelCharacterSpacing = stylingObject.defaultCharacterSpacing;
-            hoverLabelCharacterSpacing = stylingObject.hoverLabelCharacterSpacing;
+            if (currentStyle.textFontAsset) {label.font = currentStyle.textFontAsset;}
+            label.fontSizeMax = currentStyle.fontSize;
+            defaultFontWeight = currentStyle.defaultFontWeight;
+            hoverFontWeight = currentStyle.hoverFontWeight;
+            defaultFontStyle = currentStyle.defaultFontStyle;
+            hoverFontStyle = currentStyle.hoverFontStyle;
+            defaultLabelCharacterSpacing = currentStyle.defaultCharacterSpacing;
+            hoverLabelCharacterSpacing = currentStyle.hoverLabelCharacterSpacing;
             
-            defaultContentColor = stylingObject.defaultContentColor;
-            hoverContentColor = stylingObject.hoverContentColor;
+            defaultContentColor = currentStyle.defaultContentColor;
+            hoverContentColor = currentStyle.hoverContentColor;
+            pressedContentColor = currentStyle.pressedContentColor;
             #endregion
+        }
+
+        public void SetStyle(SelectableStylingObject stylingObject)
+        {
+            currentStyle = stylingObject;
+            LoadStyle();
+            InitializeSelectable();
         }
 
         protected virtual void InitializeSelectable()
@@ -166,7 +186,7 @@ namespace AlexH.AdvancedGUI
            
             if (_isPressed)
             {
-                ClickedState(false);
+                PressedState(false);
                 _isPressed = false;
             }
            
@@ -185,7 +205,7 @@ namespace AlexH.AdvancedGUI
 
             OnPressed?.Invoke(this, true);
 
-            ClickedState(true);
+            PressedState(true);
             _isPressed = true;
         }
 
@@ -194,7 +214,7 @@ namespace AlexH.AdvancedGUI
             if (!_isPressed) return;
             
             OnPressed?.Invoke(this, false);
-            ClickedState(false);
+            PressedState(false);
             _isPressed = false;
 
         }
@@ -230,10 +250,19 @@ namespace AlexH.AdvancedGUI
             _currentSequence = HoverSequence(hover);
         }
 
-        protected virtual void ClickedState(bool clicked)
+        protected virtual void PressedState(bool pressed)
         {
-            _currentSequence?.Kill();
-            _currentSequence = ClickedSequence(clicked);
+
+            if (pressed)
+            {
+                label.color = pressedContentColor;
+                _currentSequence?.Kill();
+                _currentSequence = PressedSequence();
+            }
+            else
+            {
+                HoverState(true);
+            }
         }
         
         protected Sequence HoverSequence(bool hover)
@@ -275,17 +304,19 @@ namespace AlexH.AdvancedGUI
             return sequence;
         }
 
-        private Sequence ClickedSequence(bool clicked)
+        private Sequence PressedSequence()
         {
             Sequence sequence = DOTween.Sequence();
+            
+            sequence
+                .Append(backgroundTransform
+                    .DOSizeDelta(GetPaddedSize(_defaultSize, clickedSizeDelta), clickedTransitionDuration/2)
+                    .SetEase(Ease.OutCubic))
+                .Join(backgroundImage.DOColor(pressedColor, clickedTransitionDuration/2).SetEase(Ease.Linear));
 
-            if (clicked)
+            /*if (pressed)
             {
-                sequence
-                    .Append(backgroundTransform
-                        .DOSizeDelta(GetPaddedSize(_defaultSize, clickedSizeDelta), clickedTransitionDuration/2)
-                        .SetEase(Ease.OutCubic))
-                    .Join(backgroundImage.DOColor(pressedColor, clickedTransitionDuration/2).SetEase(Ease.Linear));
+                
             }
 
             else
@@ -295,7 +326,7 @@ namespace AlexH.AdvancedGUI
                         .DOSizeDelta(GetPaddedSize(_defaultSize, hoverSizeDelta), clickedTransitionDuration*2)
                         .SetEase(Ease.InQuart))
                     .Join(backgroundImage.DOColor(hoverColor, clickedTransitionDuration*2).SetEase(Ease.Linear));
-            }
+            }*/
 
             return sequence;
         }

@@ -1,30 +1,97 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using LRS.Singleton;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 namespace AlexH.AdvancedGUI
 {
-    public class AdvancedGUIManager : Singleton<AdvancedGUIManager>
+    [ExecuteInEditMode]
+    public class AdvancedGUIManager : MonoBehaviour, ISerializationCallbackReceiver
     {
-        [Header("Selectables")]
-        public Color defaultColor = Color.gray;
-        public Color hoverColor = Color.white;
-        public Color pressedColor = Color.yellow;
-        public Color disabledColor = Color.black;
-        [Space]
-        [SerializeField] private bool useRoundedCorners;
+        public StyleThemeObject theme;
 
-        [Header("Text")] 
-        public TMP_FontAsset fontAsset;
-        public float fontSize = 36f;
-        public Color defaultTextColor = Color.black;
-        public Color hoverTextColor = Color.black;
+        private StyledText[] _styledTexts;
+        private AdvancedButton[] _advancedButtons;
+        private AdvancedSlider[] _advancedSliders;
+        
+        public void OnBeforeSerialize()
+        {
+#if UNITY_EDITOR
+            
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating) return;
+            
+            FindStyledObjects();
+            ApplyTheme(theme);
+            
+            EditorUtility.SetDirty(gameObject);
+#endif
+        }
 
-        [Header("Transitions")] 
-        public TransitionType transitionType;
-        public float transitionDuration;
-       
+        public void OnAfterDeserialize()
+        {
+        }
+
+        private void Start()
+        {
+            FindStyledObjects();
+            ApplyTheme(theme);
+        }
+
+        private void ApplyTheme(StyleThemeObject styleTheme) 
+        {
+            if (!styleTheme)
+            {
+                return;
+            }
+            
+            foreach (StyledText styledText in _styledTexts)
+            {
+                switch (styledText.type)
+                {
+                    case StyledTextType.Paragraph:
+                        styledText.SetStyle(styleTheme.paragraphTextStyle);
+                        break;
+                    case StyledTextType.Title:
+                        styledText.SetStyle(styleTheme.titleTextStyle);
+                        break;
+                    case StyledTextType.Headline01:
+                        styledText.SetStyle(styleTheme.headline01TextStyle);
+                        break;
+                    case StyledTextType.Headline02:
+                        styledText.SetStyle(styleTheme.headline02TextStyle);
+                        break;
+                    case StyledTextType.Headline03:
+                        styledText.SetStyle(styleTheme.headline03TextStyle);
+                        break;
+                    case StyledTextType.Breadcrumb:
+                        styledText.SetStyle(styleTheme.breadcrumbTextStyle);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            foreach (AdvancedButton button in _advancedButtons)
+            {
+                button.SetStyle(theme.buttonStyle);
+            }
+
+            foreach (AdvancedSlider slider in _advancedSliders)
+            {
+                slider.SetStyle(theme.sliderStyle);
+            }
+        }
+
+        private void FindStyledObjects()
+        {
+            _styledTexts = FindObjectsByType<StyledText>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            _advancedButtons = FindObjectsByType<AdvancedButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            _advancedSliders = FindObjectsByType<AdvancedSlider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        }
     }
+    
+    
 }

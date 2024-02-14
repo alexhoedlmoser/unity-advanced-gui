@@ -18,6 +18,7 @@ namespace AlexH.AdvancedGUI
         
         public Color defaultContentColor = Color.black;
         public Color hoverContentColor = Color.black;
+        public Color pressedContentColor = Color.white;
         
         [Header("Frame")]
         public Sprite defaultSprite;
