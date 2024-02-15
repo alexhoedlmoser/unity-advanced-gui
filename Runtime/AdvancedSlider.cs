@@ -34,7 +34,7 @@ namespace AlexH
         private Vector2 _sliderDefaultSize;
         
         private RectTransform _sliderTransform;
-        private Sequence _currentSliderHoverSequence;
+        private Sequence _currentSliderSequence;
         private Image[] _allSliderImages;
 
         protected override void Awake()
@@ -77,61 +77,69 @@ namespace AlexH
             
             valueText.color = defaultContentColor;
             valueText.fontWeight = defaultFontWeight;
+            
+            _currentSliderSequence?.Kill();
+            _currentSliderSequence = SliderToDefaultSequence();
         }
 
-        protected override void HoverState(bool hover)
+        protected override void DefaultStateInstant()
         {
-            base.HoverState(hover);
+            base.DefaultStateInstant();
+            RecolorImagesWithAlpha(sliderFrameImages, defaultContentColor, 1f);
+            RecolorImageWithAlpha(sliderHandleImage, defaultColor, 1f);
+            
+            valueText.color = defaultContentColor;
+            valueText.fontWeight = defaultFontWeight;
 
-            if (hover)
+            if (!_sliderTransform)
             {
-                RecolorImagesWithAlpha(sliderFrameImages, hoverContentColor, 1f);
-                RecolorImageWithAlpha(sliderHandleImage, hoverColor, 1f);
-                valueText.color = hoverContentColor;
-                valueText.fontWeight = hoverFontWeight;
-            }
-            else
-            {
-                DefaultState();
+                _sliderTransform = slider.gameObject.GetComponent<RectTransform>();
+                _sliderDefaultSize = _sliderTransform.sizeDelta;
             }
             
-            _currentSliderHoverSequence?.Kill();
-            _currentSliderHoverSequence = SliderHoverSequence(hover);
+            _sliderTransform.sizeDelta = _sliderDefaultSize;
         }
 
-        protected override void PressedState(bool pressed)
+        protected override void HoverState()
         {
-            base.PressedState(pressed);
-
-            if (pressed)
-            {
-                RecolorImageWithAlpha(sliderHandleImage, pressedColor, 1f);
-            }
-            else
-            {
-                RecolorImageWithAlpha(sliderHandleImage, hoverColor, 1f);
-            }
+            base.HoverState();
+            
+            RecolorImagesWithAlpha(sliderFrameImages, hoverContentColor, 1f);
+            RecolorImageWithAlpha(sliderHandleImage, hoverColor, 1f);
+            valueText.color = hoverContentColor;
+            valueText.fontWeight = hoverFontWeight;
+            
+            _currentSliderSequence?.Kill();
+            _currentSliderSequence = SliderHoverSequence();
         }
 
-        private Sequence SliderHoverSequence(bool hover)
+        protected override void PressedState()
+        {
+            base.PressedState();
+
+            RecolorImageWithAlpha(sliderHandleImage, pressedColor, 1f);
+        }
+
+        private Sequence SliderHoverSequence()
         {
             Sequence sequence;
             
-            if (hover)
-            {
-                sequence = DOTween.Sequence()
-                    .Append(_sliderTransform.DOSizeDelta(
-                        new Vector2(_sliderDefaultSize.x, _sliderDefaultSize.y + sliderHoverHeightDelta),
-                        hoverTransitionDuration).SetEase(Ease.OutCubic));
-            }
-            else
-            {
-                sequence = DOTween.Sequence()
-                    .Append(_sliderTransform.DOSizeDelta(
-                        _sliderDefaultSize, hoverTransitionDuration).SetEase(Ease.OutCubic));
-
-            }
-
+            sequence = DOTween.Sequence()
+                .Append(_sliderTransform.DOSizeDelta(
+                    new Vector2(_sliderDefaultSize.x, _sliderDefaultSize.y + sliderHoverHeightDelta),
+                    hoverTransitionDuration).SetEase(Ease.OutCubic));
+                
+            return sequence;
+        }
+        
+        private Sequence SliderToDefaultSequence()
+        {
+            Sequence sequence;
+            
+            sequence = DOTween.Sequence()
+                .Append(_sliderTransform.DOSizeDelta(
+                    _sliderDefaultSize, hoverTransitionDuration).SetEase(Ease.OutCubic));
+            
             return sequence;
         }
 

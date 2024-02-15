@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc03bd344afe43b4ab0bc396f428f4bc, type: 3}
   m_Name: DarkWhite_defaultSelectable
   m_EditorClassIdentifier: 
-  defaultColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.7490196}
+  defaultColor: {r: 0.148, g: 0.148, b: 0.148, a: 0.7490196}
   hoverColor: {r: 0.9019608, g: 0.9019608, b: 0.9019608, a: 0.9019608}
   pressedColor: {r: 1, g: 1, b: 1, a: 1}
   disabledColor: {r: 0, g: 0, b: 0, a: 1}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DarkWhiteTheme
   m_EditorClassIdentifier: 
   buttonStyle: {fileID: 11400000, guid: f31df83a2659bf14bbe8d6525ee8a0de, type: 2}
-  navButtonStyle: {fileID: 0}
+  navButtonStyle: {fileID: 11400000, guid: f6616cc778d51c44c98d71ceec004886, type: 2}
   sliderStyle: {fileID: 11400000, guid: f31df83a2659bf14bbe8d6525ee8a0de, type: 2}
   titleTextStyle: {fileID: 11400000, guid: 85592cd5794f242459b218671d5aba6c, type: 2}
   headline01TextStyle: {fileID: 11400000, guid: 278f430dd970e774593e496a9883d168, type: 2}

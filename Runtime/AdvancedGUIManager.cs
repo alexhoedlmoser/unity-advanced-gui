@@ -15,6 +15,7 @@ namespace AlexH.AdvancedGUI
 
         private StyledText[] _styledTexts;
         private AdvancedButton[] _advancedButtons;
+        private AdvancedNavButton[] _advancedNavButtons;
         private AdvancedSlider[] _advancedSliders;
         
         public void OnBeforeSerialize()
@@ -78,6 +79,11 @@ namespace AlexH.AdvancedGUI
             {
                 button.SetStyle(theme.buttonStyle);
             }
+            
+            foreach (AdvancedNavButton button in _advancedNavButtons)
+            {
+                button.SetStyle(theme.navButtonStyle);
+            }
 
             foreach (AdvancedSlider slider in _advancedSliders)
             {
@@ -89,6 +95,7 @@ namespace AlexH.AdvancedGUI
         {
             _styledTexts = FindObjectsByType<StyledText>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _advancedButtons = FindObjectsByType<AdvancedButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            _advancedNavButtons = FindObjectsByType<AdvancedNavButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _advancedSliders = FindObjectsByType<AdvancedSlider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         }
     }

@@ -50,8 +50,7 @@ namespace AlexH.AdvancedGUI
         
         protected float hoverSizeDelta;
         protected float hoverTransitionDuration;
-        protected float clickedSizeDelta = 50f;
-        protected float clickedTransitionDuration = 0.05f;
+        protected float pressedSizeDelta;
 
         #endregion
         
@@ -59,12 +58,14 @@ namespace AlexH.AdvancedGUI
         protected RectTransform backgroundTransform;
         private Vector2 _defaultSize;
         
-        private Sequence _currentSequence;
+        protected Sequence currentSequence;
         private Coroutine _characterSpacingTween;
 
         protected SelectableStylingObject currentStyle;
 
-        private bool _isPressed;
+        protected bool isHovered;
+        protected bool isPressed;
+        protected bool isSelected;
 
         #region Getter
 
@@ -97,12 +98,13 @@ namespace AlexH.AdvancedGUI
             rectTransform = GetComponent<RectTransform>();
             backgroundTransform = backgroundImage.GetComponent<RectTransform>();
             _defaultSize = backgroundTransform.sizeDelta;
+            
+            LoadStyle();
+            InitializeSelectable();
         }
 
         protected virtual void Start()
         {
-            LoadStyle();
-            InitializeSelectable();
         }
         
         protected virtual void LoadStyle()
@@ -137,6 +139,7 @@ namespace AlexH.AdvancedGUI
             
             hoverSizeDelta = currentStyle.hoverSizeDelta;
             hoverTransitionDuration = currentStyle.hoverTransitionDuration;
+            pressedSizeDelta = currentStyle.pressedSizeDelta;
             #endregion
 
             #region Label
@@ -171,27 +174,38 @@ namespace AlexH.AdvancedGUI
             label.text = labelText;
             icon.sprite = iconSprite;
             
-            DefaultState();
+            DefaultStateInstant();
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public virtual void OnPointerEnter(PointerEventData eventData)
         {
             OnHover?.Invoke(this, true);
-            HoverState(true);
+
+            isHovered = true;
+            
+            HoverState();
+            
+            if (isPressed)
+            {
+                OnPressed?.Invoke(this, true);
+                PressedState();
+            }
         }
         
-        public void OnPointerExit(PointerEventData eventData)
+        public virtual void OnPointerExit(PointerEventData eventData)
         {
             OnHover?.Invoke(this, false);
-           
-            if (_isPressed)
+            isHovered = false;
+
+            if (isSelected)
             {
-                PressedState(false);
-                _isPressed = false;
+                SelectedState();
             }
-           
-            HoverState(false);
-            
+            else
+            {
+                DefaultState();
+            }
+
         }
 
         public virtual void OnPointerClick(PointerEventData eventData)
@@ -205,128 +219,153 @@ namespace AlexH.AdvancedGUI
 
             OnPressed?.Invoke(this, true);
 
-            PressedState(true);
-            _isPressed = true;
+            isPressed = true;
+            
+            PressedState();
+           
         }
 
-        public void OnPointerUp(PointerEventData eventData)
+        public virtual void OnPointerUp(PointerEventData eventData)
         {
-            if (!_isPressed) return;
+            //if (!isPressed) return;
             
             OnPressed?.Invoke(this, false);
-            PressedState(false);
-            _isPressed = false;
+            isPressed = false;
 
-        }
-
-        protected virtual void DefaultState()
-        {
-            backgroundImage.color = defaultColor;
-            
-            icon.color = defaultContentColor;
-            
-            label.color = defaultContentColor;
-            label.characterSpacing = defaultLabelCharacterSpacing;
-            label.fontWeight = defaultFontWeight;
-            label.fontStyle = defaultFontStyle;
-            
-        }
-
-        protected virtual void HoverState(bool hover)
-        {
-            if (hover)
+            if (isHovered)
             {
-                icon.color =  hoverContentColor;
-                label.color = hoverContentColor;
-                label.fontWeight = hoverFontWeight;
-                label.fontStyle = hoverFontStyle;
+                HoverState();
+            }
+            else if (isSelected)
+            {
+                SelectedState();
             }
             else
             {
                 DefaultState();
             }
-            
-            _currentSequence?.Kill();
-            _currentSequence = HoverSequence(hover);
         }
 
-        protected virtual void PressedState(bool pressed)
+        protected virtual void DefaultState()
         {
-
-            if (pressed)
-            {
-                label.color = pressedContentColor;
-                _currentSequence?.Kill();
-                _currentSequence = PressedSequence();
-            }
-            else
-            {
-                HoverState(true);
-            }
+            icon.color = defaultContentColor;
+            label.color = defaultContentColor;
+            
+            label.fontWeight = defaultFontWeight;
+            label.fontStyle = defaultFontStyle;
+            
+            currentSequence?.Kill();
+            currentSequence = ToDefaultSequence(hoverTransitionDuration);
         }
         
-        protected Sequence HoverSequence(bool hover)
+        protected virtual void DefaultStateInstant()
         {
-            Sequence sequence = DOTween.Sequence();
-            if (hover)
+            icon.color = defaultContentColor;
+            label.color = defaultContentColor;
+            
+            label.fontWeight = defaultFontWeight;
+            label.fontStyle = defaultFontStyle;
+
+            backgroundImage.color = defaultColor;
+            label.characterSpacing = defaultLabelCharacterSpacing;
+        }
+
+        protected virtual void HoverState()
+        {
+            if (isSelected)
             {
-                sequence
-                    .Append(backgroundTransform.DOSizeDelta(GetPaddedSize(_defaultSize, hoverSizeDelta), hoverTransitionDuration).SetEase(Ease.OutCubic))
-                    .Join(backgroundImage.DOColor(hoverColor, hoverTransitionDuration).SetEase(Ease.Linear));
-
-                // sequence.Join(useIconInsteadOfLabel
-                //     ? icon.DOColor(_hoverLabelColor, hoverTransitionDuration).SetEase(Ease.Linear)
-                //     : label.DOColor(_hoverLabelColor, hoverTransitionDuration).SetEase(Ease.Linear));
-
-                if (_characterSpacingTween != null)
-                {
-                    StopCoroutine(_characterSpacingTween);
-                }
-                _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, hoverLabelCharacterSpacing, hoverTransitionDuration));
+                icon.color =  pressedContentColor;
+                label.color = pressedContentColor;
             }
             else
             {
-                sequence
-                    .Append(backgroundTransform.DOSizeDelta(_defaultSize, hoverTransitionDuration).SetEase(Ease.OutCubic))
-                    .Join(backgroundImage.DOColor(defaultColor, hoverTransitionDuration).SetEase(Ease.Linear));
-
-                // sequence.Join(useIconInsteadOfLabel
-                //     ? icon.DOColor(_defaultLabelColor, hoverTransitionDuration).SetEase(Ease.Linear)
-                //     : label.DOColor(_defaultLabelColor, hoverTransitionDuration).SetEase(Ease.Linear));
-
-                if (_characterSpacingTween != null)
-                {
-                    StopCoroutine(_characterSpacingTween);
-                }
-                _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, defaultLabelCharacterSpacing, hoverTransitionDuration));
+                icon.color =  hoverContentColor;
+                label.color = hoverContentColor;
             }
+
+            label.fontWeight = hoverFontWeight;
+            label.fontStyle = hoverFontStyle;
+            
+            currentSequence?.Kill();
+            currentSequence = ToHoverSequence(hoverTransitionDuration, isSelected);
+        }
+
+        protected virtual void PressedState()
+        {
+            label.color = pressedContentColor;
+            icon.color = pressedContentColor;
+            
+            label.fontWeight = hoverFontWeight;
+
+            currentSequence?.Kill();
+            currentSequence = ToPressedSequence(0);
+        }
+
+        protected virtual void SelectedState()
+        {
+            label.color = pressedContentColor;
+            icon.color = pressedContentColor;
+            
+            label.fontWeight = hoverFontWeight;
+            
+            currentSequence?.Kill();
+            currentSequence = ToSelectedSequence(hoverTransitionDuration);
+        }
+
+        protected Sequence ToHoverSequence(float duration, bool whileSelected = false)
+        {
+            Sequence sequence = DOTween.Sequence();
+            sequence
+                    .Append(backgroundTransform.DOSizeDelta(GetPaddedSize(_defaultSize, hoverSizeDelta), duration).SetEase(Ease.OutCubic))
+                    .Join(backgroundImage.DOColor(whileSelected? pressedColor : hoverColor, duration).SetEase(Ease.Linear));
+                
+            if (_characterSpacingTween != null)
+            {
+                StopCoroutine(_characterSpacingTween);
+            }
+            _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, hoverLabelCharacterSpacing, hoverTransitionDuration));
+
+            return sequence;
+        }
+    
+        protected Sequence ToDefaultSequence(float duration)
+        {
+            Sequence sequence = DOTween.Sequence();
+            sequence
+                .Append(backgroundTransform.DOSizeDelta(_defaultSize, duration).SetEase(Ease.OutCubic))
+                .Join(backgroundImage.DOColor(defaultColor, duration).SetEase(Ease.Linear));
+
+            if (_characterSpacingTween != null)
+            {
+                StopCoroutine(_characterSpacingTween);
+            }
+            _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, defaultLabelCharacterSpacing, hoverTransitionDuration));
 
             return sequence;
         }
 
-        private Sequence PressedSequence()
+        protected Sequence ToPressedSequence(float duration)
         {
             Sequence sequence = DOTween.Sequence();
             
             sequence
                 .Append(backgroundTransform
-                    .DOSizeDelta(GetPaddedSize(_defaultSize, clickedSizeDelta), clickedTransitionDuration/2)
+                    .DOSizeDelta(GetPaddedSize(_defaultSize, pressedSizeDelta), duration)
                     .SetEase(Ease.OutCubic))
-                .Join(backgroundImage.DOColor(pressedColor, clickedTransitionDuration/2).SetEase(Ease.Linear));
+                .Join(backgroundImage.DOColor(pressedColor, duration).SetEase(Ease.Linear));
 
-            /*if (pressed)
-            {
-                
-            }
-
-            else
-            {
-                sequence
-                    .Append(backgroundTransform
-                        .DOSizeDelta(GetPaddedSize(_defaultSize, hoverSizeDelta), clickedTransitionDuration*2)
-                        .SetEase(Ease.InQuart))
-                    .Join(backgroundImage.DOColor(hoverColor, clickedTransitionDuration*2).SetEase(Ease.Linear));
-            }*/
+            return sequence;
+        }
+        
+        protected Sequence ToSelectedSequence(float duration)
+        {
+            Sequence sequence = DOTween.Sequence();
+            
+            sequence
+                .Append(backgroundTransform
+                    .DOSizeDelta(_defaultSize, duration)
+                    .SetEase(Ease.OutCubic))
+                .Join(backgroundImage.DOColor(pressedColor, duration).SetEase(Ease.Linear));
 
             return sequence;
         }

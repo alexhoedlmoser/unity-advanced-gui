@@ -49,6 +49,11 @@ namespace AlexH
 
         private void LoadStyle()
         {
+            if (!gameObject.activeSelf)
+            {
+                return;
+            }
+            
             if (overrideStylingObject)
             {
                 _currentStyle = overrideStylingObject;
@@ -57,6 +62,11 @@ namespace AlexH
             if (!_currentStyle)
             {
                 return;
+            }
+            
+            if (_text == null)
+            {
+                _text = gameObject.GetComponent<TMP_Text>();
             }
             
             _text.enableAutoSizing = useAutoSize;

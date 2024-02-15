@@ -64,7 +64,7 @@ namespace AlexH.AdvancedGUI
             _borderMask = borderImage.GetComponentInParent<RectMask2D>();
             _fillMask = fillImage.GetComponentInParent<RectMask2D>();
             
-            _selectables = uiParent.GetComponentsInChildren<AdvancedSelectable>();
+            _selectables = uiParent.GetComponentsInChildren<AdvancedSelectable>(includeInactive: true);
         }
 
         private void Start()

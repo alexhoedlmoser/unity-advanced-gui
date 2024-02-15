@@ -43,6 +43,7 @@ namespace AlexH.AdvancedGUI
         public float hoverSizeDelta;
         public float hoverTransitionDuration = 0.1f;
         public float hoverLabelCharacterSpacing = 15f;
+        public float pressedSizeDelta = 50f;
 
         public float GetPixelMultiplierForRoundness()
         {
