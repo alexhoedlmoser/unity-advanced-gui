@@ -147,6 +147,8 @@ namespace AlexH.AdvancedGUI
             if (hover)
             {
                 _rectTransform.SetParent(selectableTransform.parent, true);
+                _rectTransform.localScale = Vector3.one;
+                
                 
                 if (!_currentSelectableTransform || _currentSelectableTransform == selectableTransform)
                 {

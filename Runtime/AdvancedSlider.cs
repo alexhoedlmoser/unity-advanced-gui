@@ -154,5 +154,12 @@ namespace AlexH
             if (_allSliderImages.All(image => eventData.pointerEnter != image.gameObject)) return;
             base.OnPointerDown(eventData);
         }
+
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            if (_allSliderImages.All(image => eventData.pointerEnter != image.gameObject)) return;
+            base.OnPointerClick(eventData);
+
+        }
     }
 }

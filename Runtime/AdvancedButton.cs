@@ -8,10 +8,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using static AlexH.AdvancedGUI.Helper;
 
-namespace AlexH.AdvancedGUI{
+namespace AlexH.AdvancedGUI
+{
     public class AdvancedButton : AdvancedSelectable
     {
         [Header("--- Button Specific ---")]

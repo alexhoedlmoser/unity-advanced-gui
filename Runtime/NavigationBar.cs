@@ -2,17 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AlexH.AdvancedGUI;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH
 {
     public class NavigationBar : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] private AdvancedNavButton[] navButtons;
         [SerializeField] private CanvasGroup[] menuPages;
 
+        [Header("Input Actions")]
         [SerializeField] private InputActionReference previousPageInputAction;
         [SerializeField] private InputActionReference nextPageInputAction;
 
@@ -75,33 +79,40 @@ namespace AlexH
             {
                 page.blocksRaycasts = false;
                 page.alpha = 0f;
+                //page.gameObject.SetActive(false);
             }
-
+            
+            //menuPages[menuIndex].gameObject.SetActive(true);
             menuPages[menuIndex].blocksRaycasts = true;
             menuPages[menuIndex].alpha = 1f;
+           
         }
 
-        public void NextPage()
+        private void NextPage()
         {
             if (_currentNavIndex+1 >= navButtons.Length)
             {
-                navButtons[0].SelectButton();
+                SimulateButtonClick(navButtons[0].gameObject);
+                //navButtons[0].SelectButton();
             }
             else
             {
-                navButtons[_currentNavIndex+1].SelectButton();
+                SimulateButtonClick(navButtons[_currentNavIndex+1].gameObject);
+                //navButtons[_currentNavIndex+1].SelectButton();
             }
         }
-        
-        public void PreviousPage()
+
+        private void PreviousPage()
         {
             if (_currentNavIndex-1 < 0)
             {
-                navButtons[^1].SelectButton();
+                SimulateButtonClick( navButtons[^1].gameObject);
+                //navButtons[^1].SelectButton();
             }
             else
             {
-                navButtons[_currentNavIndex - 1].SelectButton();
+                SimulateButtonClick(navButtons[_currentNavIndex - 1].gameObject);
+                //navButtons[_currentNavIndex - 1].SelectButton();
             }
         }
     }

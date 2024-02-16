@@ -11,6 +11,7 @@ using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
 {
+    [RequireComponent(typeof(UpdateSelectableInEditMode))]
     public class AdvancedSelectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
     {
         public event Action<AdvancedSelectable, bool> OnHover;
@@ -22,9 +23,12 @@ namespace AlexH.AdvancedGUI
         
         [Header("References")] 
         [SerializeField] protected Image backgroundImage;
-        [SerializeField] protected Image icon;
         [SerializeField] protected TMP_Text label;
-
+        
+        [Header("Optional")]
+        [SerializeField] protected Image icon;
+        [SerializeField] private RectTransform scaleOnClick;
+        
         [Header("Settings")]
         [SerializeField] protected SelectableStylingObject overrideStylingObject;
         public bool useUniversalHighlight;
@@ -128,15 +132,15 @@ namespace AlexH.AdvancedGUI
                 return;
             }
 
-            if (currentStyle.useRoundedCorners)
+            if (currentStyle.sprite)
             {
-                backgroundImage.sprite = currentStyle.roundedCornersSprite;
-                backgroundImage.type = Image.Type.Tiled;
-                backgroundImage.pixelsPerUnitMultiplier = currentStyle.GetPixelMultiplierForRoundness();
+                backgroundImage.sprite = currentStyle.sprite;
+                backgroundImage.type = currentStyle.imageMode;
+                backgroundImage.pixelsPerUnitMultiplier = currentStyle.spritePixelPerUnitMultiplier;
             }
             else
             {
-                backgroundImage.sprite = currentStyle.defaultSprite;
+                backgroundImage.sprite = null;
             }
             
             defaultColor = currentStyle.defaultColor;
@@ -220,7 +224,10 @@ namespace AlexH.AdvancedGUI
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            
+            if (scaleOnClick)
+            {
+                ScaleBounce(scaleOnClick, 0.0125f, hoverTransitionDuration);
+            }
         }
         
         public virtual void OnPointerDown(PointerEventData eventData)
@@ -232,6 +239,8 @@ namespace AlexH.AdvancedGUI
             isPressed = true;
             
             PressedState();
+
+            
            
         }
 

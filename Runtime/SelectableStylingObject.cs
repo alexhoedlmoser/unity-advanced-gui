@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static AlexH.AdvancedGUI.Helper;
 
 
@@ -21,11 +23,9 @@ namespace AlexH.AdvancedGUI
         public Color pressedContentColor = Color.white;
         
         [Header("Frame")]
-        public Sprite defaultSprite;
-        public bool useRoundedCorners = true;
-        public Sprite roundedCornersSprite;
-        [Range(1, 10)]
-        public int cornerRoundness = 3;
+        public Sprite sprite;
+        public Image.Type imageMode = Image.Type.Tiled;
+        public int spritePixelPerUnitMultiplier = 3;
 
         [Header("Text")] 
         public TMP_FontAsset textFontAsset;
@@ -46,10 +46,5 @@ namespace AlexH.AdvancedGUI
         public float hoverTransitionDuration = 0.1f;
         public float hoverLabelCharacterSpacing = 15f;
         public float pressedSizeDelta = 50f;
-
-        public float GetPixelMultiplierForRoundness()
-        {
-           return RemapRange(cornerRoundness, 1, 10, 20, 3);
-        }
     }
 }

@@ -20,6 +20,8 @@ namespace AlexH.AdvancedGUI
         
         public override void OnPointerClick(PointerEventData eventData)
         {
+            base.OnPointerClick(eventData);
+            
             if (eventData.button != PointerEventData.InputButton.Left)
             {
                 return;

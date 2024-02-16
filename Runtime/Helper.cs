@@ -166,10 +166,10 @@ namespace AlexH.AdvancedGUI
         public static async void SimulateButtonClick(GameObject button)
         {
             ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerDownHandler);
-            await Task.Delay(100);
+            await Task.Delay(10);
             ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerUpHandler);
             ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
-            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerExitHandler);
+            //ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerExitHandler);
         }
     
         public static async void SimulateButtonDown(GameObject button)
@@ -182,6 +182,14 @@ namespace AlexH.AdvancedGUI
             ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerUpHandler);
             ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
             ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerExitHandler);
+        }
+        
+        public static Sequence ScaleBounce(RectTransform transform, float scaleDelta, float duration)
+        {
+            return DOTween.Sequence()
+                .Append(transform.DOScale(1f + scaleDelta, 0.15f).SetEase(Ease.OutCubic))
+                .Append(transform.DOScale(1f, duration).SetEase(Ease.OutCubic));
+            //.Append(transform.DOShakePosition(duration, strength));
         }
     }
 }

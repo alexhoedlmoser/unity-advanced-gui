@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace AlexH.AdvancedGUI
 {
-    public class AdvancedSelectableEvents : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
+    public class AdvancedSelectableEvents : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
 
         [SerializeField] private AdvancedSelectable selectable;
@@ -14,6 +14,7 @@ namespace AlexH.AdvancedGUI
         [SerializeField] private bool pointerExit;
         [SerializeField] private bool pointerDown;
         [SerializeField] private bool pointerUp;
+        [SerializeField] private bool pointerClick;
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -44,6 +45,14 @@ namespace AlexH.AdvancedGUI
             if (pointerExit)
             {
                 selectable.OnPointerExit(eventData);
+            }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (pointerClick)
+            {
+                selectable.OnPointerClick(eventData);
             }
         }
     }

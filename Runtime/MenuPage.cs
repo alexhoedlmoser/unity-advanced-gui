@@ -37,31 +37,27 @@ namespace AlexH.AdvancedGUI
     [RequireComponent(typeof(CanvasGroup))]
     public class MenuPage : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] private AdvancedButton backButton;
-        [SerializeField] private float transitionDuration = 0.5f;
-        
+
+        [Header("Settings")]
         [SerializeField] private Vector3 defaultPosition = Vector3.zero;
-        
         [SerializeField] private int referenceScreenWidth = 1920;
         [SerializeField] private int referenceScreenHeight = 1080;
 
+        [Space]
         public MenuPageTransition[] transitions;
 
         private CanvasGroup _canvasGroup;
         private RectTransform _rectTransform;
-        
         private Sequence _currentSequence;
-        
-        private AdvancedButton[] childrenButtons;
-
-        public bool isOn;
+        private AdvancedButton[] _childrenButtons;
 
         private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             _rectTransform = GetComponent<RectTransform>();
-
-            childrenButtons = GetComponentsInChildren<AdvancedButton>(includeInactive: true);
+            _childrenButtons = GetComponentsInChildren<AdvancedButton>(includeInactive: true);
         }
 
         private void OnDestroy()
@@ -69,11 +65,7 @@ namespace AlexH.AdvancedGUI
             _currentSequence?.Kill();
         }
 
-        private void OnBackActionPerformed(InputAction.CallbackContext obj)
-        {
-            if (backButton == null) return;
-            SimulateButtonClick(backButton.gameObject);
-        }
+        #region Editor Methods
 
         [ContextMenu("Set new default Position")]
         public void SetDefaultPosition()
@@ -84,8 +76,40 @@ namespace AlexH.AdvancedGUI
             }
             defaultPosition = _rectTransform.localPosition;
         }
+        
+        
+        [ContextMenu("Enable Page")]
+        public void EnablePage()
+        {
+            gameObject.SetActive(true);
+            
+            if (!_canvasGroup)
+            {
+                _canvasGroup = GetComponent<CanvasGroup>();
+            }
+            
+            _canvasGroup.alpha = 1f;
+            _canvasGroup.interactable = true;
+            _canvasGroup.blocksRaycasts = true;
+        }
+        
+        [ContextMenu("Disable Page")]
+        public void DisablePage()
+        {
+            if (!_canvasGroup)
+            {
+                _canvasGroup = GetComponent<CanvasGroup>();
+            }
+            
+            _canvasGroup.alpha = 0f;
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+            gameObject.SetActive(false);
+        }
 
-        public Vector3 GetPositionDeltaFromGradient(GradientType gradientType)
+        #endregion
+        
+        private Vector3 GetPositionDeltaFromGradient(GradientType gradientType)
         {
             Vector3 deltaVector = Vector3.zero;
 
@@ -117,7 +141,7 @@ namespace AlexH.AdvancedGUI
             gameObject.SetActive(true);
             
             //SoundManager.Instance.OpenMenu();
-            foreach (AdvancedButton button in childrenButtons)
+            foreach (AdvancedButton button in _childrenButtons)
             {
                 button.ActivateShortcut();
             }
@@ -129,7 +153,7 @@ namespace AlexH.AdvancedGUI
         public void DeactivatePage()
         {
             //SoundManager.Instance.CloseMenu();
-            foreach (AdvancedButton button in childrenButtons)
+            foreach (AdvancedButton button in _childrenButtons)
             {
                 button.DeactivateShortcut();
             }
@@ -137,36 +161,7 @@ namespace AlexH.AdvancedGUI
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
         }
-        
-        [ContextMenu("Enable Page")]
-        public void EnablePage()
-        {
-            gameObject.SetActive(true);
-            
-            if (!_canvasGroup)
-            {
-                _canvasGroup = GetComponent<CanvasGroup>();
-            }
-            
-            _canvasGroup.alpha = 1f;
-            _canvasGroup.interactable = true;
-            _canvasGroup.blocksRaycasts = true;
-        }
-        
-        [ContextMenu("Disable Page")]
-        public void DisablePage()
-        {
-            if (!_canvasGroup)
-            {
-                _canvasGroup = GetComponent<CanvasGroup>();
-            }
-            
-            _canvasGroup.alpha = 0f;
-            _canvasGroup.interactable = false;
-            _canvasGroup.blocksRaycasts = false;
-            gameObject.SetActive(false);
-        }
-        
+
         public Sequence PageFadeOutSequence(GradientType transitionDirection, float duration)
         {
             return DOTween.Sequence()
