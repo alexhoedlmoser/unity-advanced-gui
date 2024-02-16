@@ -24,7 +24,7 @@ namespace AlexH.AdvancedGUI
         [SerializeField] protected Image backgroundImage;
         [SerializeField] protected Image icon;
         [SerializeField] protected TMP_Text label;
-        
+
         [Header("Settings")]
         [SerializeField] protected SelectableStylingObject overrideStylingObject;
         public bool useUniversalHighlight;
@@ -42,8 +42,10 @@ namespace AlexH.AdvancedGUI
 
         protected FontWeight defaultFontWeight;
         protected FontWeight hoverFontWeight;
+        protected FontWeight selectedFontWeight;
         protected FontStyles defaultFontStyle;
         protected FontStyles hoverFontStyle;
+        protected FontStyles selectedFontStyle;
 
         protected float defaultLabelCharacterSpacing;
         protected float hoverLabelCharacterSpacing;
@@ -106,7 +108,12 @@ namespace AlexH.AdvancedGUI
         protected virtual void Start()
         {
         }
-        
+
+        protected virtual void OnDestroy()
+        {
+            currentSequence?.Kill();
+        }
+
         protected virtual void LoadStyle()
         {
             #region Frame
@@ -147,8 +154,11 @@ namespace AlexH.AdvancedGUI
             label.fontSizeMax = currentStyle.fontSize;
             defaultFontWeight = currentStyle.defaultFontWeight;
             hoverFontWeight = currentStyle.hoverFontWeight;
+            selectedFontWeight = currentStyle.selectedFontWeight;
             defaultFontStyle = currentStyle.defaultFontStyle;
             hoverFontStyle = currentStyle.hoverFontStyle;
+            selectedFontStyle = currentStyle.selectedFontStyle;
+            
             defaultLabelCharacterSpacing = currentStyle.defaultCharacterSpacing;
             hoverLabelCharacterSpacing = currentStyle.hoverLabelCharacterSpacing;
             
@@ -306,7 +316,8 @@ namespace AlexH.AdvancedGUI
             label.color = pressedContentColor;
             icon.color = pressedContentColor;
             
-            label.fontWeight = hoverFontWeight;
+            label.fontWeight = selectedFontWeight;
+            label.fontStyle = selectedFontStyle;
             
             currentSequence?.Kill();
             currentSequence = ToSelectedSequence(hoverTransitionDuration);

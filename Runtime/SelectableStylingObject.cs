@@ -33,8 +33,10 @@ namespace AlexH.AdvancedGUI
         public float fontSize = 36f;
         public FontWeight defaultFontWeight;
         public FontWeight hoverFontWeight;
+        public FontWeight selectedFontWeight;
         public FontStyles defaultFontStyle;
         public FontStyles hoverFontStyle;
+        public FontStyles selectedFontStyle;
         public float defaultCharacterSpacing;
         
         [Header("Animation Properties")]

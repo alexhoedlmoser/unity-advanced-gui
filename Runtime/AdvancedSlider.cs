@@ -46,6 +46,12 @@ namespace AlexH
             
             base.Awake();
         }
+        
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            _currentSliderSequence?.Kill();
+        }
 
         protected override void LoadStyle()
         {

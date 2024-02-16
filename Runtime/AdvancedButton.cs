@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -6,6 +7,7 @@ using TreeEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static AlexH.AdvancedGUI.Helper;
 
@@ -14,7 +16,7 @@ namespace AlexH.AdvancedGUI{
     {
         [Header("--- Button Specific ---")]
         [Space]
-        
+        public InputActionReference shortcutInputAction;
         public UnityEvent onClickEvent;
 
         [Header("Settings")] 
@@ -30,6 +32,27 @@ namespace AlexH.AdvancedGUI{
         public void OnClick()
         {
             onClickEvent.Invoke();
+        }
+
+        public void ActivateShortcut()
+        {
+            if (shortcutInputAction)
+            {
+                shortcutInputAction.action.performed += OnShortcutInputAction;
+            }
+        }
+        
+        public void DeactivateShortcut()
+        {
+            if (shortcutInputAction)
+            {
+                shortcutInputAction.action.performed -= OnShortcutInputAction;
+            }
+        }
+
+        private void OnShortcutInputAction(InputAction.CallbackContext obj)
+        {
+            SimulateButtonClick(gameObject);
         }
     }
 }

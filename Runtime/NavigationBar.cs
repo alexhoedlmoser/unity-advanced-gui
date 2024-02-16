@@ -51,6 +51,9 @@ namespace AlexH
             {
                 navButton.OnSelected -= OnButtonSelectedHandler;
             }
+            
+            previousPageInputAction.action.performed -= OnPreviousPageInput;
+            nextPageInputAction.action.performed -= OnNextPageInput;
         }
 
         private void OnButtonSelectedHandler(AdvancedNavButton navButton)

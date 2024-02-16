@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace AlexH.AdvancedGUI
@@ -159,6 +161,27 @@ namespace AlexH.AdvancedGUI
             }
 
             return softnessVector;
+        }
+        
+        public static async void SimulateButtonClick(GameObject button)
+        {
+            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerDownHandler);
+            await Task.Delay(100);
+            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerUpHandler);
+            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerExitHandler);
+        }
+    
+        public static async void SimulateButtonDown(GameObject button)
+        {
+            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerDownHandler);
+        }
+    
+        public static async void SimulateButtonUp(GameObject button)
+        {
+            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerUpHandler);
+            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerExitHandler);
         }
     }
 }

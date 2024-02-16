@@ -28,10 +28,13 @@ MonoBehaviour:
   fontSize: 20
   defaultFontWeight: 400
   hoverFontWeight: 900
+  selectedFontWeight: 900
   defaultFontStyle: 0
   hoverFontStyle: 2
+  selectedFontStyle: 0
   defaultCharacterSpacing: 5
   transitionType: 1
   hoverSizeDelta: -10
   hoverTransitionDuration: 0.1
   hoverLabelCharacterSpacing: 15
+  pressedSizeDelta: 50
