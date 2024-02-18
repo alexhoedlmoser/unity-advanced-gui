@@ -25,24 +25,24 @@ namespace AlexH.AdvancedGUI
         [Header("Frame")]
         public Sprite sprite;
         public Image.Type imageMode = Image.Type.Tiled;
-        public int spritePixelPerUnitMultiplier = 3;
+        public int spritePixelPerUnitMultiplier = 6;
 
         [Header("Text")] 
         public TMP_FontAsset textFontAsset;
         public TMP_FontAsset numbersFontAsset;
-        public float fontSize = 36f;
-        public FontWeight defaultFontWeight;
-        public FontWeight hoverFontWeight;
-        public FontWeight selectedFontWeight;
-        public FontStyles defaultFontStyle;
-        public FontStyles hoverFontStyle;
-        public FontStyles selectedFontStyle;
-        public float defaultCharacterSpacing;
+        public float fontSize = 22f;
+        public FontWeight defaultFontWeight = FontWeight.Regular;
+        public FontWeight hoverFontWeight = FontWeight.Black;
+        public FontWeight selectedFontWeight = FontWeight.Black;
+        public FontStyles defaultFontStyle = FontStyles.Normal;
+        public FontStyles hoverFontStyle = FontStyles.Italic;
+        public FontStyles selectedFontStyle = FontStyles.Normal;
+        public float defaultCharacterSpacing = 5f;
         
         [Header("Animation Properties")]
         public TransitionType transitionType;
         [Space]
-        public float hoverSizeDelta;
+        public float hoverSizeDelta = -10f;
         public float hoverTransitionDuration = 0.1f;
         public float hoverLabelCharacterSpacing = 15f;
         public float pressedSizeDelta = 50f;

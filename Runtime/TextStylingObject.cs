@@ -14,8 +14,8 @@ namespace AlexH.AdvancedGUI
         [Header("Text")] 
         public TMP_FontAsset textFontAsset;
         public float fontSize = 20f;
-        public FontWeight fontWeight;
-        public FontStyles fontStyle;
+        public FontWeight fontWeight = FontWeight.Regular;
+        public FontStyles fontStyle = FontStyles.Normal;
         public float characterSpacing;
     }
 }

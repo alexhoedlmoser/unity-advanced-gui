@@ -79,10 +79,15 @@ namespace AlexH.AdvancedGUI
         {
             return defaultColor;
         }
-        
+
         public Color GetHoverColor()
         {
             return hoverColor;
+        }
+        
+        public Color GetContentHoverColor()
+        {
+            return hoverContentColor;
         }
         
         public Color GetPressedColor()
@@ -353,7 +358,10 @@ namespace AlexH.AdvancedGUI
             Sequence sequence = DOTween.Sequence();
             sequence
                 .Append(backgroundTransform.DOSizeDelta(_defaultSize, duration).SetEase(Ease.OutCubic))
-                .Join(backgroundImage.DOColor(defaultColor, duration).SetEase(Ease.Linear));
+                .Join(backgroundImage.DOColor(defaultColor, duration).SetEase(Ease.Linear)).OnComplete((delegate
+                {
+                    backgroundImage.color = defaultColor;
+                }));
 
             if (_characterSpacingTween != null)
             {

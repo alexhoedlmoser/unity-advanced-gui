@@ -111,6 +111,27 @@ namespace AlexH.AdvancedGUI
             image.color = tmpColor;
         }
         
+        public static Color ColorModifyAlpha(Color color, float alpha)
+        {
+            color.a = alpha;
+
+            return color;
+        }
+        
+        public static Color ColorModifyBrightness(Color color, float brightness, bool fullAlpha = true)
+        {
+            color.r *= brightness;
+            color.g *= brightness;
+            color.b *= brightness;
+
+            if (fullAlpha)
+            {
+                color.a = 1f;
+            }
+            
+            return color;
+        }
+        
         public static Vector4 GetPaddingFromGradient(GradientType gradient, float padding)
         {
             Vector4 paddingVector = Vector4.zero;

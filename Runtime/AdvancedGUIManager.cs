@@ -13,10 +13,11 @@ namespace AlexH.AdvancedGUI
         public StyleThemeObject theme;
 
         private StyledText[] _styledTexts;
+        private StyledImage[] _styledImages;
         private AdvancedButton[] _advancedButtons;
         private AdvancedNavButton[] _advancedNavButtons;
         private AdvancedSlider[] _advancedSliders;
-        
+
         public void OnBeforeSerialize()
         {
 #if UNITY_EDITOR
@@ -69,6 +70,23 @@ namespace AlexH.AdvancedGUI
                     case StyledTextType.Breadcrumb:
                         styledText.SetStyle(styleTheme.breadcrumbTextStyle);
                         break;
+                    case StyledTextType.Value:
+                        styledText.SetStyle(styleTheme.valueTextStyle);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            foreach (StyledImage styledImage in _styledImages)
+            {
+                switch (styledImage.type)
+                {
+                    case StyledImageType.None:
+                        break;
+                    case StyledImageType.BackgroundPanel:
+                        styledImage.SetStyle(styleTheme.backgroundImageStyle);
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -93,6 +111,7 @@ namespace AlexH.AdvancedGUI
         private void FindStyledObjects()
         {
             _styledTexts = FindObjectsByType<StyledText>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            _styledImages = FindObjectsByType<StyledImage>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _advancedButtons = FindObjectsByType<AdvancedButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _advancedNavButtons = FindObjectsByType<AdvancedNavButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _advancedSliders = FindObjectsByType<AdvancedSlider>(FindObjectsInactive.Include, FindObjectsSortMode.None);

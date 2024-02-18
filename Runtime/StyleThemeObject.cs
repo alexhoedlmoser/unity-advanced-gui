@@ -20,6 +20,10 @@ namespace AlexH.AdvancedGUI
         public TextStylingObject headline03TextStyle;
         public TextStylingObject breadcrumbTextStyle;
         public TextStylingObject paragraphTextStyle;
+        public TextStylingObject valueTextStyle;
+
+        [Header("Images")]
+        public ImageStylingObject backgroundImageStyle;
 
         [Header("Transitions")] 
         public TransitionType transitionType;

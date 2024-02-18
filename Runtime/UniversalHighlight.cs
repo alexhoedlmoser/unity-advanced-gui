@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static AlexH.AdvancedGUI.Helper;
 
@@ -31,8 +32,8 @@ namespace AlexH.AdvancedGUI
         [Range(0, 1)]
         [SerializeField] private float fillGradientSoftness = 0.5f;
         [Space]
-        [Tooltip("Sets the colors to the default color of the highlighted Selectable, instead of the hover color of the highlighted Selectable")]
-        [SerializeField] private bool matchSelectableDefaultColor;
+        [Tooltip("Sets the colors to the content color of the highlighted Selectable, instead of the frame color of the highlighted Selectable")]
+        [SerializeField] private bool matchSelectableContentColor;
         
         [Header("Animation Properties")]
         [SerializeField] private float animationDuration = 0.2f;
@@ -102,10 +103,10 @@ namespace AlexH.AdvancedGUI
             _fillMask.softness = GetSoftnessFromGradient(fillGradientType, _rectTransform.sizeDelta, fillGradientSoftness);
         }
 
-        private void UpdateColors(Color color)
+        private void UpdateColors(Color frameColor, Color contentColor)
         {
-            RecolorImageWithAlpha(borderImage, color, borderAlpha);
-            RecolorImageWithAlpha(fillImage, color, fillAlpha);
+            RecolorImageWithAlpha(fillImage, matchSelectableContentColor ? contentColor : frameColor, fillAlpha);
+            RecolorImageWithAlpha(borderImage, frameColor, borderAlpha);
         }
 
         private void OnEnable()
@@ -155,7 +156,7 @@ namespace AlexH.AdvancedGUI
                     SetTo(selectableTransform.localPosition);
                 }
 
-                UpdateColors(matchSelectableDefaultColor ? selectable.GetDefaultColor() : selectable.GetHoverColor());
+                UpdateColors(selectable.GetHoverColor(), selectable.GetContentHoverColor());
                 
                 _currentSequence?.Kill();
                 _currentSequence = AnimateTo(selectableTransform);
@@ -173,12 +174,12 @@ namespace AlexH.AdvancedGUI
         {
             if (pressed)
             {
-                UpdateColors(matchSelectableDefaultColor ? selectable.GetDefaultColor() : selectable.GetPressedColor());
+                UpdateColors(selectable.GetPressedColor(), selectable.GetContentHoverColor());
             }
 
             else
             {
-                UpdateColors(matchSelectableDefaultColor ? selectable.GetDefaultColor() : selectable.GetHoverColor());
+                UpdateColors(selectable.GetHoverColor(), selectable.GetContentHoverColor());
             }
         }
 

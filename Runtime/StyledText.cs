@@ -18,6 +18,7 @@ namespace AlexH
         Headline02,
         Headline03,
         Breadcrumb,
+        Value
     }
     
     [ExecuteInEditMode]
@@ -25,7 +26,9 @@ namespace AlexH
     {
         [SerializeField] private TextStylingObject overrideStylingObject;
         [SerializeField] private bool useAutoSize;
+        
         public StyledTextType type;
+        [SerializeField] private bool onlyApplyColors;
         
         private TMP_Text _text;
         private TextStylingObject _currentStyle;
@@ -69,6 +72,13 @@ namespace AlexH
                 _text = gameObject.GetComponent<TMP_Text>();
             }
             
+            _text.color = _currentStyle.color;
+            
+            if (onlyApplyColors)
+            {
+                return;
+            }
+            
             _text.enableAutoSizing = useAutoSize;
 
             if (useAutoSize)
@@ -80,7 +90,7 @@ namespace AlexH
             {
                 _text.fontSize = _currentStyle.fontSize;
             }
-            _text.color = _currentStyle.color;
+           
             _text.font = _currentStyle.textFontAsset;
             _text.fontStyle = _currentStyle.fontStyle;
             
