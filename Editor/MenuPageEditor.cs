@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using AlexH.AdvancedGUI;
+using UnityEditor.Graphs;
 
 namespace AlexH.AdvancedGUI.Editor
 {
@@ -21,13 +22,20 @@ namespace AlexH.AdvancedGUI.Editor
             {
                 menuPageScript.SetDefaultPosition();
             }
+            {
+                menuPageScript.SetDefaultPosition();
+            }
             
-            if (GUILayout.Button("Enable Page"))
+            GUILayout.Space(10);
+            
+            GUI.backgroundColor = Color.green;
+            if (GUILayout.Button("Enable Page", GUILayout.Height(50)))
             {
                 menuPageScript.EnablePage();
             }
             
-            if (GUILayout.Button("Disable Page"))
+            GUI.backgroundColor = Color.red;
+            if (GUILayout.Button("Disable Page" ,GUILayout.Height(50)))
             {
                 menuPageScript.DisablePage();
             }

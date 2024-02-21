@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd961e9e279f68747ac3eb7b53df69d6, type: 3}
+  m_Name: DarkLime_Theme
+  m_EditorClassIdentifier: 
+  buttonStyle: {fileID: 11400000, guid: 57eccfed6da0cb642b930c441d0d4bee, type: 2}
+  navButtonStyle: {fileID: 11400000, guid: 9fc210b66a9e71a488ab60bc762c0532, type: 2}
+  settingsButtonStyle: {fileID: 11400000, guid: 57eccfed6da0cb642b930c441d0d4bee, type: 2}
+  titleTextStyle: {fileID: 11400000, guid: c68bed5a0ec488944a1092893e98694f, type: 2}
+  headline01TextStyle: {fileID: 11400000, guid: 86ce6f610140c4a49a63dde90a1fa355, type: 2}
+  headline02TextStyle: {fileID: 11400000, guid: 72855af7b4f78c74ea603fc57291da6c, type: 2}
+  headline03TextStyle: {fileID: 11400000, guid: 99d1a2a94bad5b94db66e0300c55bb2a, type: 2}
+  breadcrumbTextStyle: {fileID: 11400000, guid: b11a187a19fb9cc4b83b0b9efa8f0619, type: 2}
+  paragraphTextStyle: {fileID: 11400000, guid: e1f5733c20afbc5469b9519d4e71da13, type: 2}
+  valueTextStyle: {fileID: 0}
+  backgroundImageStyle: {fileID: 11400000, guid: 7bdd6a7619138a14ba4ec26aacef4ce9, type: 2}
+  transitionType: 0
+  transitionDuration: 0

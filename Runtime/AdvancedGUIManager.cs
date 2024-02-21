@@ -17,6 +17,8 @@ namespace AlexH.AdvancedGUI
         private AdvancedButton[] _advancedButtons;
         private AdvancedNavButton[] _advancedNavButtons;
         private AdvancedSlider[] _advancedSliders;
+        private AdvancedToggle[] _advancedToggles;
+        private AdvancedCarouselButton[] _advancedCarouselButtons;
 
         public void OnBeforeSerialize()
         {
@@ -35,7 +37,7 @@ namespace AlexH.AdvancedGUI
         {
         }
 
-        private void Start()
+        private void Awake()
         {
             FindStyledObjects();
             ApplyTheme(theme);
@@ -104,7 +106,17 @@ namespace AlexH.AdvancedGUI
 
             foreach (AdvancedSlider slider in _advancedSliders)
             {
-                slider.SetStyle(theme.sliderStyle);
+                slider.SetStyle(theme.settingsButtonStyle);
+            }
+            
+            foreach (AdvancedToggle toggle in _advancedToggles)
+            {
+                toggle.SetStyle(theme.settingsButtonStyle);
+            }
+            
+            foreach (AdvancedCarouselButton carouselButton in _advancedCarouselButtons)
+            {
+                carouselButton.SetStyle(theme.settingsButtonStyle);
             }
         }
 
@@ -115,6 +127,8 @@ namespace AlexH.AdvancedGUI
             _advancedButtons = FindObjectsByType<AdvancedButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _advancedNavButtons = FindObjectsByType<AdvancedNavButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _advancedSliders = FindObjectsByType<AdvancedSlider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            _advancedToggles = FindObjectsByType<AdvancedToggle>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            _advancedCarouselButtons = FindObjectsByType<AdvancedCarouselButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         }
     }
     

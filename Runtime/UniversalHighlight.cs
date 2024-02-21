@@ -125,6 +125,8 @@ namespace AlexH.AdvancedGUI
                 selectable.OnHover -= OnHoverHandler;
                 selectable.OnPressed -= OnPressedHandler;
             }
+
+            _currentSelectableTransform = null;
         }
 
         private void OnDestroy()
@@ -140,7 +142,7 @@ namespace AlexH.AdvancedGUI
 
             if (!selectable.useUniversalHighlight)
             {
-                SetTo(selectableTransform.localPosition);
+                SetTo(selectableTransform);
                 _currentSelectableTransform = selectableTransform;
                 return;
             }
@@ -153,7 +155,7 @@ namespace AlexH.AdvancedGUI
                 
                 if (!_currentSelectableTransform || _currentSelectableTransform == selectableTransform)
                 {
-                    SetTo(selectableTransform.localPosition);
+                    SetTo(selectableTransform);
                 }
 
                 UpdateColors(selectable.GetHoverColor(), selectable.GetContentHoverColor());
@@ -174,18 +176,20 @@ namespace AlexH.AdvancedGUI
         {
             if (pressed)
             {
-                UpdateColors(selectable.GetPressedColor(), selectable.GetContentHoverColor());
+                SetImageAlpha(fillImage, 0);
+                //UpdateColors(selectable.GetPressedColor(), selectable.GetContentHoverColor());
             }
 
             else
             {
-                UpdateColors(selectable.GetHoverColor(), selectable.GetContentHoverColor());
+                SetImageAlpha(fillImage, fillAlpha);
+                //UpdateColors(selectable.GetHoverColor(), selectable.GetContentHoverColor());
             }
         }
 
         private Sequence AnimateTo(RectTransform rectTransform)
         {
-            _rectTransform.sizeDelta = GetPaddedSize(rectTransform.sizeDelta, transitionSizeDelta);
+            //_rectTransform.sizeDelta = GetPaddedSize(rectTransform.sizeDelta, transitionSizeDelta);
             Vector2 endSize = GetPaddedSize(rectTransform.sizeDelta, endSizeDelta);
             _canvasGroup.alpha = 0f;
 
@@ -198,9 +202,10 @@ namespace AlexH.AdvancedGUI
                 .Append(_rectTransform.DOSizeDelta(endSize, bounceDuration/2).SetEase(Ease.InQuint));
         }
 
-        private void SetTo(Vector3 position)
+        private void SetTo(RectTransform rectTransform)
         {
-            _rectTransform.localPosition = position;
+            _rectTransform.localPosition = rectTransform.localPosition;
+            _rectTransform.sizeDelta = GetPaddedSize(rectTransform.sizeDelta, transitionSizeDelta);
             UpdateGradients();
         }
 

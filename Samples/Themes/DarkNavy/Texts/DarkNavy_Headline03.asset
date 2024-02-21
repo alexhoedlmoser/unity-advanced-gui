@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42dd1bbbf9e1f4a49aed9b31409d1b5e, type: 3}
+  m_Name: DarkNavy_Headline03
+  m_EditorClassIdentifier: 
+  color: {r: 0.7411765, g: 0.8352942, b: 0.90196085, a: 1}
+  textFontAsset: {fileID: 11400000, guid: 54a144b7b4bf7e64286c6076f88368c6, type: 2}
+  fontSize: 32
+  fontWeight: 700
+  fontStyle: 0
+  characterSpacing: 10

@@ -11,7 +11,7 @@ namespace AlexH.AdvancedGUI
         [Header("Selectables")] 
         public SelectableStylingObject buttonStyle;
         public SelectableStylingObject navButtonStyle;
-        public SelectableStylingObject sliderStyle;
+        public SelectableStylingObject settingsButtonStyle;
 
         [Header("Text")] 
         public TextStylingObject titleTextStyle;

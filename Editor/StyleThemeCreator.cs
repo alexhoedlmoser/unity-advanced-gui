@@ -44,7 +44,7 @@ namespace AlexH.AdvancedGUI.Editor
             // Texture2D headerTexture = (Texture2D)Resources.Load("TitleHeader");
             // GUILayout.Box(headerTexture, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             
-            Texture2D cover = Resources.Load<Texture2D>("TitleHeader");
+            Texture2D cover = Resources.Load<Texture2D>("Images/TitleHeader");
             float imageWidth = EditorGUIUtility.currentViewWidth;
             float imageHeight = imageWidth * cover.height / cover.width;
             Rect rect = GUILayoutUtility.GetRect(imageWidth, imageHeight);
@@ -97,6 +97,7 @@ namespace AlexH.AdvancedGUI.Editor
         private void CreateStyles()
         {
             CreateDefaultSelectableStyle();
+            CreateSettingsButtonStyle();
             CreateNavButtonStyle();
             
             CreateTextStylingObject("Title", _headlineColor, 72f, 10f, _titleFontWeight);
@@ -149,9 +150,9 @@ namespace AlexH.AdvancedGUI.Editor
                 AssetDatabase.LoadAssetAtPath(
                     _path + "/" + _themeName + "/Selectables/" + _themeName + "_DefaultSelectable.asset",
                     typeof(SelectableStylingObject)) as SelectableStylingObject;
-            styleThemeObject.sliderStyle =
+            styleThemeObject.settingsButtonStyle =
                 AssetDatabase.LoadAssetAtPath(
-                    _path + "/" + _themeName + "/Selectables/" + _themeName + "_DefaultSelectable.asset",
+                    _path + "/" + _themeName + "/Selectables/" + _themeName + "_SettingsSelectable.asset",
                     typeof(SelectableStylingObject)) as SelectableStylingObject;
             styleThemeObject.navButtonStyle =
                 AssetDatabase.LoadAssetAtPath(
@@ -222,13 +223,45 @@ namespace AlexH.AdvancedGUI.Editor
             defaultSelectableStyle.pressedContentColor = ColorModifyAlpha(_contrastColor, 1f);
             
             defaultSelectableStyle.textFontAsset = _font;
-            
+            if (_numbersFont)
+            {
+                defaultSelectableStyle.numbersFontAsset = _numbersFont;
+            }
+
             defaultSelectableStyle.sprite = _frameSprite;
             defaultSelectableStyle.imageMode = _frameImageMode;
             
             AssetDatabase.CreateAsset(defaultSelectableStyle, _path + "/" + _themeName + "/Selectables/" + _themeName + "_DefaultSelectable.asset");
             AssetDatabase.SaveAssets();
             
+        }
+        
+        private void CreateSettingsButtonStyle()
+        {
+            SelectableStylingObject settingsSelectableStyle = CreateInstance<SelectableStylingObject>();
+            settingsSelectableStyle.name = _themeName + "_SettingsSelectable";
+            
+            settingsSelectableStyle.defaultColor = ColorModifyAlpha(_baseColor, 0.75f);
+            settingsSelectableStyle.hoverColor = _highlightColor;
+            settingsSelectableStyle.pressedColor = ColorModifyAlpha(_highlightColor, 1f);
+            settingsSelectableStyle.disabledColor = ColorModifyAlpha(_baseColor, 0.25f);
+
+            settingsSelectableStyle.defaultContentColor = _highlightColor;
+            settingsSelectableStyle.hoverContentColor = _contrastColor;
+            settingsSelectableStyle.pressedContentColor = ColorModifyAlpha(_contrastColor, 1f);
+
+            settingsSelectableStyle.textFontAsset = _font;
+            
+            if (_numbersFont)
+            {
+                settingsSelectableStyle.numbersFontAsset = _numbersFont;
+            }
+            
+            settingsSelectableStyle.sprite = _frameSprite;
+            settingsSelectableStyle.imageMode = _frameImageMode;
+
+            AssetDatabase.CreateAsset(settingsSelectableStyle, _path + "/" + _themeName + "/" + "/Selectables/" + _themeName + "_SettingsSelectable.asset");
+            AssetDatabase.SaveAssets();
         }
 
         private void CreateNavButtonStyle()
@@ -246,6 +279,11 @@ namespace AlexH.AdvancedGUI.Editor
             navButtonStyle.pressedContentColor = ColorModifyAlpha(_contrastColor, 1f);
 
             navButtonStyle.textFontAsset = _font;
+
+            if (_numbersFont)
+            {
+                navButtonStyle.numbersFontAsset = _numbersFont;
+            }
             
             navButtonStyle.sprite = _frameSprite;
             navButtonStyle.imageMode = _frameImageMode;

@@ -31,7 +31,7 @@ namespace AlexH.AdvancedGUI
         
         [Header("Settings")]
         [SerializeField] protected SelectableStylingObject overrideStylingObject;
-        public bool useUniversalHighlight;
+        public bool useUniversalHighlight = true;
         [SerializeField] protected bool useIconInsteadOfLabel;
 
         #region Style Properties
@@ -139,15 +139,19 @@ namespace AlexH.AdvancedGUI
 
             if (currentStyle.sprite)
             {
-                backgroundImage.sprite = currentStyle.sprite;
-                backgroundImage.type = currentStyle.imageMode;
-                backgroundImage.pixelsPerUnitMultiplier = currentStyle.spritePixelPerUnitMultiplier;
+                if (backgroundImage)
+                {
+                    backgroundImage.sprite = currentStyle.sprite;
+                    backgroundImage.type = currentStyle.imageMode;
+                    backgroundImage.pixelsPerUnitMultiplier = currentStyle.spritePixelPerUnitMultiplier;
+                }
+               
             }
-            else
+            else if (backgroundImage)
             {
                 backgroundImage.sprite = null;
             }
-            
+
             defaultColor = currentStyle.defaultColor;
             hoverColor = currentStyle.hoverColor;
             pressedColor = currentStyle.pressedColor;
@@ -160,7 +164,12 @@ namespace AlexH.AdvancedGUI
 
             #region Label
             if (currentStyle.textFontAsset) {label.font = currentStyle.textFontAsset;}
-            label.fontSizeMax = currentStyle.fontSize;
+
+            if (label)
+            {
+                label.fontSizeMax = currentStyle.fontSize;
+            }
+            
             defaultFontWeight = currentStyle.defaultFontWeight;
             hoverFontWeight = currentStyle.hoverFontWeight;
             selectedFontWeight = currentStyle.selectedFontWeight;
@@ -187,11 +196,17 @@ namespace AlexH.AdvancedGUI
         protected virtual void InitializeSelectable()
         {
             // icon or label
-            label.gameObject.SetActive(!useIconInsteadOfLabel);
-            icon.gameObject.SetActive(useIconInsteadOfLabel);
-
-            label.text = labelText;
-            icon.sprite = iconSprite;
+            if (label)
+            {
+                label.gameObject.SetActive(!useIconInsteadOfLabel);
+                label.text = labelText;
+            }
+            
+            if (icon)
+            {
+                icon.gameObject.SetActive(useIconInsteadOfLabel);
+                icon.sprite = iconSprite;
+            }
             
             DefaultStateInstant();
         }
@@ -284,14 +299,24 @@ namespace AlexH.AdvancedGUI
         
         protected virtual void DefaultStateInstant()
         {
-            icon.color = defaultContentColor;
-            label.color = defaultContentColor;
-            
-            label.fontWeight = defaultFontWeight;
-            label.fontStyle = defaultFontStyle;
+            if (icon)
+            {
+                icon.color = defaultContentColor;
+            }
 
-            backgroundImage.color = defaultColor;
-            label.characterSpacing = defaultLabelCharacterSpacing;
+            if (label)
+            {
+                label.color = defaultContentColor;
+            
+                label.fontWeight = defaultFontWeight;
+                label.fontStyle = defaultFontStyle;
+                label.characterSpacing = defaultLabelCharacterSpacing;
+            }
+
+            if (backgroundImage)
+            {
+                backgroundImage.color = defaultColor;
+            }
         }
 
         protected virtual void HoverState()
@@ -335,6 +360,34 @@ namespace AlexH.AdvancedGUI
             
             currentSequence?.Kill();
             currentSequence = ToSelectedSequence(hoverTransitionDuration);
+        }
+        
+        protected virtual void SelectedStateInstant()
+        {
+            if (label)
+            {
+                label.color = pressedContentColor;
+                label.fontWeight = selectedFontWeight;
+                label.fontStyle = selectedFontStyle;
+            }
+
+            if (icon)
+            {
+                icon.color = pressedContentColor;
+            }
+
+            if (backgroundImage)
+            {
+                backgroundImage.color = pressedColor;
+
+                if (!backgroundTransform)
+                {
+                    backgroundTransform = backgroundImage.GetComponent<RectTransform>();
+                    _defaultSize = backgroundTransform.sizeDelta;
+                }
+                
+                backgroundTransform.sizeDelta = _defaultSize;
+            }
         }
 
         protected Sequence ToHoverSequence(float duration, bool whileSelected = false)

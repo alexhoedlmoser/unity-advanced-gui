@@ -52,6 +52,20 @@ namespace AlexH.AdvancedGUI
             }
         }
 
+        public void SelectButtonOnStart()
+        {
+            OnSelected?.Invoke(this);
+            isSelected = true;
+            
+            SelectedStateInstant();
+        }
+
+        public IEnumerator SelectButtonOnStartDelayed()
+        {
+            yield return new WaitForEndOfFrame();
+            SelectButtonOnStart();
+        }
+
         public void UnselectButton()
         {
             isSelected = false;

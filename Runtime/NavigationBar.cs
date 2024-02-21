@@ -22,12 +22,6 @@ namespace AlexH
 
         private int _currentNavIndex;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            navButtons[0].SelectButton();
-        }
-
         private void OnEnable()
         {
             foreach (AdvancedNavButton navButton in navButtons)
@@ -37,6 +31,8 @@ namespace AlexH
 
             previousPageInputAction.action.performed += OnPreviousPageInput;
             nextPageInputAction.action.performed += OnNextPageInput;
+            
+            StartCoroutine(navButtons[0].SelectButtonOnStartDelayed());
         }
 
         private void OnNextPageInput(InputAction.CallbackContext obj)

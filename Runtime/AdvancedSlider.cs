@@ -42,11 +42,16 @@ namespace AlexH
             _allSliderImages = slider.gameObject.GetComponentsInChildren<Image>();
             _sliderTransform = slider.gameObject.GetComponent<RectTransform>();
             _sliderDefaultSize = _sliderTransform.sizeDelta;
-            UpdateValueText(slider.value);
             
             base.Awake();
         }
-        
+
+        protected override void Start()
+        {
+            base.Start();
+            UpdateValueText(slider.value);
+        }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -58,9 +63,13 @@ namespace AlexH
             base.LoadStyle();
 
             if (!currentStyle) return;
-            
-            valueText.font = currentStyle.numbersFontAsset ? currentStyle.numbersFontAsset : currentStyle.textFontAsset;
-            valueText.fontSizeMax = currentStyle.fontSize;
+
+            if (valueText)
+            {
+                valueText.font = currentStyle.numbersFontAsset ? currentStyle.numbersFontAsset : currentStyle.textFontAsset;
+                valueText.fontSizeMax = currentStyle.fontSize;
+                valueText.characterSpacing = currentStyle.defaultCharacterSpacing;
+            }
         }
 
         public void UpdateValueText(float value)
@@ -78,8 +87,8 @@ namespace AlexH
         protected override void DefaultState()
         {
             base.DefaultState();
-            RecolorImagesWithAlpha(sliderFrameImages, defaultContentColor, 1f);
-            RecolorImageWithAlpha(sliderHandleImage, defaultColor, 1f);
+            FadeImagesWithAlpha(sliderFrameImages, defaultContentColor, 1f, hoverTransitionDuration);
+            FadeImageWithAlpha(sliderHandleImage, defaultColor, 1f, hoverTransitionDuration);
             
             valueText.color = defaultContentColor;
             valueText.fontWeight = defaultFontWeight;
@@ -91,27 +100,29 @@ namespace AlexH
         protected override void DefaultStateInstant()
         {
             base.DefaultStateInstant();
+            
             RecolorImagesWithAlpha(sliderFrameImages, defaultContentColor, 1f);
             RecolorImageWithAlpha(sliderHandleImage, defaultColor, 1f);
             
-            valueText.color = defaultContentColor;
-            valueText.fontWeight = defaultFontWeight;
-
+            if (valueText)
+            {
+                valueText.color = defaultContentColor;
+                valueText.fontWeight = defaultFontWeight;
+            }
+            
             if (!_sliderTransform)
             {
                 _sliderTransform = slider.gameObject.GetComponent<RectTransform>();
                 _sliderDefaultSize = _sliderTransform.sizeDelta;
             }
-            
-            _sliderTransform.sizeDelta = _sliderDefaultSize;
         }
 
         protected override void HoverState()
         {
             base.HoverState();
             
-            RecolorImagesWithAlpha(sliderFrameImages, hoverContentColor, 1f);
-            RecolorImageWithAlpha(sliderHandleImage, hoverColor, 1f);
+            FadeImagesWithAlpha(sliderFrameImages, hoverContentColor, 1f, hoverTransitionDuration);
+            FadeImageWithAlpha(sliderHandleImage, hoverColor, 1f, hoverTransitionDuration);
             valueText.color = hoverContentColor;
             valueText.fontWeight = hoverFontWeight;
             

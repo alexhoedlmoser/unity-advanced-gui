@@ -75,6 +75,27 @@ namespace AlexH.AdvancedGUI
 
             return sequence;
         }
+        
+        public static Sequence FadeImage(Image image, Color color, float duration)
+        {
+            Sequence sequence = DOTween.Sequence();
+            
+            sequence.Join(image.DOColor(color, duration).SetEase(Ease.Linear));
+                
+            return sequence;
+        }
+        
+        public static Sequence FadeImageWithAlpha(Image image, Color color, float alpha, float duration)
+        {
+            Sequence sequence = DOTween.Sequence();
+
+            Color tmpColor = color;
+            tmpColor.a = alpha;
+            
+            sequence.Join(image.DOColor(tmpColor, duration).SetEase(Ease.Linear));
+            
+            return sequence;
+        }
 
         public static void RecolorImages(Image[] images, Color color)
         {
@@ -91,12 +112,22 @@ namespace AlexH.AdvancedGUI
             
             foreach (Image image in images)
             {
+                if (!image)
+                {
+                    continue;
+                }
+                
                 image.color = tmpColor;
             }
         }
 
         public static void RecolorImageWithAlpha(Image image, Color color, float alpha)
         {
+            if (!image)
+            {
+                return;
+            }
+            
             Color tmpColor = color;
             tmpColor.a = alpha;
             
@@ -105,6 +136,11 @@ namespace AlexH.AdvancedGUI
 
         public static void SetImageAlpha(Image image, float alpha)
         {
+            if (!image)
+            {
+                return;
+            }
+            
             Color tmpColor = image.color;
             tmpColor.a = alpha;
             
@@ -192,19 +228,7 @@ namespace AlexH.AdvancedGUI
             ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
             //ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerExitHandler);
         }
-    
-        public static async void SimulateButtonDown(GameObject button)
-        {
-            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerDownHandler);
-        }
-    
-        public static async void SimulateButtonUp(GameObject button)
-        {
-            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerUpHandler);
-            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
-            ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerExitHandler);
-        }
-        
+
         public static Sequence ScaleBounce(RectTransform transform, float scaleDelta, float duration)
         {
             return DOTween.Sequence()
