@@ -18,18 +18,13 @@
   "samples": [
     {
       "displayName": "Example Menu Scene",
-      "description": "(IMPORTANT: this sample is dependent on the Prefabs sample folder, so make sure to import it as well) Contains a sample scene showcasing how multiple AdvancedGUI components can be used to setup a main menu and a settings menu, including smooth transitions between menu pages.",
-      "path": "Samples/Scenes"
-    },
-    {
-      "displayName": "Prefabs",
-      "description": "Contains prefabs that already hav AdvancedGUI components fully setup, which include a normal button, a carousel button, a toggle and a slider.",
-      "path": "Samples/Prefabs"
+      "description": "Contains a sample scene showcasing how multiple AdvancedGUI components can be used to setup a main menu and a settings menu, including smooth transitions between menu pages. Also contains prefabs that already hav AdvancedGUI components fully setup, which include a normal button, a carousel button, a toggle and a slider.",
+      "path": "Samples~/ExampleMenu"
     },
     {
       "displayName": "Themes",
       "description": "Contains a library of style themes that can be applied to a AdvancedGUIManager component to change the look of all AdvancedGUI components in a scene.",
-      "path": "Samples/Prefabs"
+      "path": "Samples~/Themes"
     }
   ]
 }
