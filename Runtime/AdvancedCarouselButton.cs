@@ -157,6 +157,7 @@ namespace AlexH.AdvancedGUI
                 if (_leftSideHovered)
                 {
                     base.OnPointerEnter(eventData);
+                    return;
                 }
                 
                 _leftSideHovered = true;
@@ -169,6 +170,7 @@ namespace AlexH.AdvancedGUI
                 if (_rightSideHovered)
                 {
                     base.OnPointerEnter(eventData);
+                    return;
                 }
                 
                 _rightSideHovered = true;
@@ -183,12 +185,24 @@ namespace AlexH.AdvancedGUI
         {
             if (eventData.pointerEnter == leftButtonRaycast)
             {
+                if (!_leftSideHovered)
+                {
+                    base.OnPointerExit(eventData);
+                    return;
+                }
+                
                 _currentCarouselLeftSideSequence?.Kill();
                 _currentCarouselLeftSideSequence = CarouselLeftDefaultSequence();
                 _leftSideHovered = false;
             }
             else if (eventData.pointerEnter == rightButtonRaycast)
             {
+                if (!_rightSideHovered)
+                {
+                    base.OnPointerExit(eventData);
+                    return;
+                }
+                
                 _currentCarouselRightSideSequence?.Kill();
                 _currentCarouselRightSideSequence = CarouselRightDefaultSequence();
                 _rightSideHovered = false;
@@ -212,6 +226,18 @@ namespace AlexH.AdvancedGUI
             base.DefaultState();
 
             FadeImagesWithAlpha(hoverHighlightImages, defaultContentColor, hoverHighlightAlpha, hoverTransitionDuration);
+            
+            if (!_leftSideHovered)
+            {
+                FadeImageWithAlpha(leftArrowImage, defaultColor, 1f, hoverTransitionDuration);
+                FadeImageWithAlpha(leftArrowBackgroundImage, defaultContentColor, 1f, hoverTransitionDuration);
+            }
+            
+            if (!_rightSideHovered)
+            {
+                FadeImageWithAlpha(rightArrowImage, defaultColor, 1f, hoverTransitionDuration);
+                FadeImageWithAlpha(rightArrowBackgroundImage, defaultContentColor, 1f, hoverTransitionDuration);
+            }
 
             valueText.color = defaultContentColor;
             valueText.fontWeight = defaultFontWeight;
@@ -256,6 +282,18 @@ namespace AlexH.AdvancedGUI
 
             FadeImagesWithAlpha(hoverHighlightImages, hoverContentColor, hoverHighlightAlpha, hoverTransitionDuration);
 
+            if (!_leftSideHovered)
+            {
+                FadeImageWithAlpha(leftArrowImage, hoverContentColor, 1f, hoverTransitionDuration);
+                FadeImageWithAlpha(leftArrowBackgroundImage, hoverColor, 1f, hoverTransitionDuration);
+            }
+            
+            if (!_rightSideHovered)
+            {
+                FadeImageWithAlpha(rightArrowImage, hoverContentColor, 1f, hoverTransitionDuration);
+                FadeImageWithAlpha(rightArrowBackgroundImage, hoverColor, 1f, hoverTransitionDuration);
+            }
+            
             valueText.color = hoverContentColor;
             valueText.fontWeight = hoverFontWeight;
             
@@ -294,9 +332,9 @@ namespace AlexH.AdvancedGUI
                 .Append(leftHoverHighlightTransform.DOSizeDelta(
                     new Vector2(carouselBarTransform.sizeDelta.x, 0),
                     hoverTransitionDuration*2).SetEase(Ease.OutCubic))
-                .Join(_leftArrowTransform.DOScale(1.25f, hoverTransitionDuration*2).SetEase(Ease.OutCubic))
-                .Join(FadeImageWithAlpha(leftArrowImage, defaultContentColor, 1f, hoverTransitionDuration))
-                .Join(FadeImageWithAlpha(leftArrowBackgroundImage, defaultColor, 1f, hoverTransitionDuration));
+                .Join(_leftArrowTransform.DOScale(1.25f, hoverTransitionDuration).SetEase(Ease.OutCubic))
+                .Join(FadeImageWithAlpha(leftArrowImage, hoverColor, 1f, hoverTransitionDuration))
+                .Join(FadeImageWithAlpha(leftArrowBackgroundImage, hoverContentColor, 1f, hoverTransitionDuration));
             
             return sequence;
         }
@@ -309,9 +347,9 @@ namespace AlexH.AdvancedGUI
                 .Append(rightHoverHighlightTransform.DOSizeDelta(
                     new Vector2(carouselBarTransform.sizeDelta.x, 0),
                     hoverTransitionDuration*2).SetEase(Ease.OutCubic))
-                .Join(_rightArrowTransform.DOScale(1.25f, hoverTransitionDuration*2).SetEase(Ease.OutCubic))
-                .Join(FadeImageWithAlpha(rightArrowImage, defaultContentColor, 1f, hoverTransitionDuration))
-                .Join(FadeImageWithAlpha(rightArrowBackgroundImage, defaultColor, 1f, hoverTransitionDuration));
+                .Join(_rightArrowTransform.DOScale(1.25f, hoverTransitionDuration).SetEase(Ease.OutCubic))
+                .Join(FadeImageWithAlpha(rightArrowImage, hoverColor, 1f, hoverTransitionDuration))
+                .Join(FadeImageWithAlpha(rightArrowBackgroundImage, hoverContentColor, 1f, hoverTransitionDuration));
             
             return sequence;
         }
@@ -324,7 +362,7 @@ namespace AlexH.AdvancedGUI
                 .Append(leftHoverHighlightTransform.DOSizeDelta(
                     new Vector2(0, 0),
                     hoverTransitionDuration*2).SetEase(Ease.InCubic))
-                .Join(_leftArrowTransform.DOScale(1f, hoverTransitionDuration*2).SetEase(Ease.InCubic))
+                .Join(_leftArrowTransform.DOScale(1f, hoverTransitionDuration).SetEase(Ease.InCubic))
                 .Join(FadeImageWithAlpha(leftArrowImage, hoverContentColor, 1f, hoverTransitionDuration))
                 .Join(FadeImageWithAlpha(leftArrowBackgroundImage, hoverColor, 1f, hoverTransitionDuration));
             
@@ -339,7 +377,7 @@ namespace AlexH.AdvancedGUI
                 .Append(rightHoverHighlightTransform.DOSizeDelta(
                     new Vector2(0, 0),
                     hoverTransitionDuration*2).SetEase(Ease.InCubic))
-                .Join(_rightArrowTransform.DOScale(1f, hoverTransitionDuration*2).SetEase(Ease.InCubic))
+                .Join(_rightArrowTransform.DOScale(1f, hoverTransitionDuration).SetEase(Ease.InCubic))
                 .Join(FadeImageWithAlpha(rightArrowImage, hoverContentColor, 1f, hoverTransitionDuration))
                 .Join(FadeImageWithAlpha(rightArrowBackgroundImage, hoverColor, 1f, hoverTransitionDuration));
             
