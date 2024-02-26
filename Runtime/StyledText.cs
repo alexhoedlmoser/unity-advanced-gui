@@ -9,7 +9,6 @@ using UnityEngine.Serialization;
 
 namespace AlexH
 {
-
     public enum StyledTextType
     {
         Paragraph,
@@ -21,26 +20,21 @@ namespace AlexH
         Value
     }
     
+    [AddComponentMenu("Advanced GUI/Styled Text")]
     [ExecuteInEditMode]
-    public class StyledText : MonoBehaviour, ISerializationCallbackReceiver
+    public class StyledText : TMPro.TextMeshProUGUI, ISerializationCallbackReceiver
     {
-        [SerializeField] private TextStylingObject overrideStylingObject;
-        [SerializeField] private bool useAutoSize;
+        public TextStylingObject overrideStylingObject;
+        public bool useAutoSize;
         
         public StyledTextType type;
-        [SerializeField] private bool onlyApplyColors;
+        public bool onlyApplyColors;
         
-        private TMP_Text _text;
         private TextStylingObject _currentStyle;
-
-
-        private void Awake()
+        
+        protected override void Start()
         {
-            _text = GetComponent<TMP_Text>();
-        }
-
-        private void Start()
-        {
+            base.Start();
             LoadStyle();
         }
 
@@ -67,61 +61,49 @@ namespace AlexH
                 return;
             }
             
-            if (_text == null)
-            {
-                _text = gameObject.GetComponent<TMP_Text>();
-            }
-            
-            _text.color = _currentStyle.color;
+            color = _currentStyle.color;
             
             if (onlyApplyColors)
             {
                 return;
             }
             
-            _text.enableAutoSizing = useAutoSize;
+            enableAutoSizing = useAutoSize;
 
             if (useAutoSize)
             {
-                _text.fontSizeMax = _currentStyle.fontSize;
-                _text.fontSizeMin = 12;
+                fontSizeMax = _currentStyle.fontSize;
+                fontSizeMin = 12;
             }
             else
             {
-                _text.fontSize = _currentStyle.fontSize;
+                fontSize = _currentStyle.fontSize;
             }
            
-            _text.font = _currentStyle.textFontAsset;
-            _text.fontStyle = _currentStyle.fontStyle;
+            font = _currentStyle.textFontAsset;
+            fontStyle = _currentStyle.fontStyle;
             
-            _text.characterSpacing = _currentStyle.characterSpacing;
-            _text.fontWeight = _currentStyle.fontWeight;
+            characterSpacing = _currentStyle.characterSpacing;
+            fontWeight = _currentStyle.fontWeight;
         }
         
         
+#if UNITY_EDITOR
         public void OnBeforeSerialize()
         {
-#if UNITY_EDITOR
             
             if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating) return;
-
-            if (_text == null)
-            {
-                _text = gameObject.GetComponent<TMP_Text>();
-            }
             
-            if (_text != null)
-            {
-                LoadStyle();
-            }
+            LoadStyle();
             
             EditorUtility.SetDirty(gameObject);
-#endif
 
         }
 
         public void OnAfterDeserialize()
         {
         }
+        
+#endif
     }
 }

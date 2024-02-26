@@ -12,6 +12,7 @@ using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
 {
+    [AddComponentMenu("Advanced GUI/Advanced Selectables/Advanced Button")]
     public class AdvancedButton : AdvancedSelectable
     {
         [Header("--- Button Specific ---")]

@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace AlexH.AdvancedGUI
 {
+    [AddComponentMenu("Advanced GUI/Advanced GUI Manager")]
     [ExecuteInEditMode]
     public class AdvancedGUIManager : MonoBehaviour, ISerializationCallbackReceiver
     {
@@ -82,7 +83,7 @@ namespace AlexH.AdvancedGUI
 
             foreach (StyledImage styledImage in _styledImages)
             {
-                switch (styledImage.type)
+                switch (styledImage.styleType)
                 {
                     case StyledImageType.None:
                         break;

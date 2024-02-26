@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace AlexH.AdvancedGUI
 {
+    [AddComponentMenu("Advanced GUI/Effects/Mouse Parallax")]
     public class MouseParallax : MonoBehaviour
     {
         private Vector3 _screenMiddle;

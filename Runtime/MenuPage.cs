@@ -11,6 +11,7 @@ using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
 {
+    [AddComponentMenu("Advanced GUI/Menu Page")]
     [System.Serializable]
     public class MenuPageTransition
     {

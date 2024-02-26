@@ -15,6 +15,7 @@ using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH
 {
+    [AddComponentMenu("Advanced GUI/Advanced Selectables/Advanced Slider")]
     public class AdvancedSlider : AdvancedSelectable
     {
         [Header("--- Slider Specific ---")]

@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace AlexH.AdvancedGUI
 {
+    [AddComponentMenu("Advanced GUI/Effects/Advanced Selectable Pointer Events")]
     public class AdvancedSelectableEvents : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
 

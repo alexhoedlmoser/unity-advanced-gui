@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
@@ -11,24 +12,20 @@ namespace AlexH.AdvancedGUI
         None,
         BackgroundPanel,
     }
+    
+    [AddComponentMenu("Advanced GUI/Styled Image")]
     [ExecuteInEditMode]
-    public class StyledImage : MonoBehaviour, ISerializationCallbackReceiver
+    public class StyledImage : Image
     {
-        [SerializeField] private ImageStylingObject overrideStylingObject;
-        public StyledImageType type;
+        public ImageStylingObject overrideStylingObject;
+        public StyledImageType styleType;
         public bool onlyApplyColors;
-
-        private Image _image;
+        
         private ImageStylingObject _currentStyle;
-        
-        
-        private void Awake()
-        {
-            _image = GetComponent<Image>();
-        }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             LoadStyle();
         }
 
@@ -54,13 +51,8 @@ namespace AlexH.AdvancedGUI
             {
                 return;
             }
-            
-            if (_image == null)
-            {
-                _image = gameObject.GetComponent<Image>();
-            }
 
-            _image.color = _currentStyle.color;
+            color = _currentStyle.color;
             
             if (onlyApplyColors)
             {
@@ -69,41 +61,29 @@ namespace AlexH.AdvancedGUI
 
             if (_currentStyle.sprite)
             {
-                _image.sprite = _currentStyle.sprite;
-                _image.type = _currentStyle.imageMode;
-                _image.pixelsPerUnitMultiplier = _currentStyle.spritePixelPerUnitMultiplier;
+                sprite = _currentStyle.sprite;
+                type = _currentStyle.imageMode;
+                pixelsPerUnitMultiplier = _currentStyle.spritePixelPerUnitMultiplier;
             }
             else
             {
-                _image.sprite = null;
+                sprite = null;
             }
         }
         
-        
-        public void OnBeforeSerialize()
+#if UNITY_EDITOR   
+        public override void OnBeforeSerialize()
         {
-#if UNITY_EDITOR
-            
-            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating) return;
+            base.OnBeforeSerialize();
 
-            if (_image == null)
-            {
-                _image = gameObject.GetComponent<Image>();
-            }
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating) return;
             
-            if (_image != null)
-            {
-                LoadStyle();
-            }
+            LoadStyle();
             
             EditorUtility.SetDirty(gameObject);
+
+        }
 #endif
-
-        }
-
-        public void OnAfterDeserialize()
-        {
-        }
     }
 }
 

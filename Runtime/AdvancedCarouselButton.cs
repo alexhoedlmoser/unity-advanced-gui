@@ -12,6 +12,7 @@ using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
 {
+    [AddComponentMenu("Advanced GUI/Advanced Selectables/Advanced Carousel Button")]
     public class AdvancedCarouselButton : AdvancedSelectable
     {
         [Header("--- Carousel Button Specific ---")]

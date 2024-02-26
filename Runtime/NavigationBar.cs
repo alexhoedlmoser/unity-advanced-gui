@@ -10,6 +10,7 @@ using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH
 {
+    [AddComponentMenu("Advanced GUI/Navigation Bar")]
     public class NavigationBar : MonoBehaviour
     {
         [Header("References")]

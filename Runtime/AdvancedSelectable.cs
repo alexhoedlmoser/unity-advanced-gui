@@ -12,7 +12,7 @@ using static AlexH.AdvancedGUI.Helper;
 namespace AlexH.AdvancedGUI
 {
     [RequireComponent(typeof(UpdateSelectableInEditMode))]
-    public class AdvancedSelectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
+    public abstract class AdvancedSelectable : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
     {
         public event Action<AdvancedSelectable, bool> OnHover;
         public event Action<AdvancedSelectable, bool> OnPressed;

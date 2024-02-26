@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace AlexH.AdvancedGUI
 {
+    [AddComponentMenu("Advanced GUI/Advanced Selectables/Advanced Nav Button")]
     public class AdvancedNavButton : AdvancedSelectable
     {
         public event Action<AdvancedNavButton> OnSelected;

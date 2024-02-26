@@ -9,6 +9,7 @@ using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
 {
+    [AddComponentMenu("Advanced GUI/Advanced Selectables/Universal Highlight")]
     [RequireComponent(typeof(CanvasGroup))]
     public class UniversalHighlight : MonoBehaviour
     {
