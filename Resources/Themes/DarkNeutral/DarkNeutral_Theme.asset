@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonStyle: {fileID: 11400000, guid: 3b51f3dae15c5bf4c9df0a06fc5814e6, type: 2}
   navButtonStyle: {fileID: 11400000, guid: 71978ed24498dd349b80abc606af1e1a, type: 2}
-  settingsButtonStyle: {fileID: 11400000, guid: 3b51f3dae15c5bf4c9df0a06fc5814e6, type: 2}
+  settingsButtonStyle: {fileID: 11400000, guid: e95d4a2da93cebe4d8d41bca1bb62029, type: 2}
   titleTextStyle: {fileID: 11400000, guid: 9b44bf9e8b1be4744bfb3c72a1985a4d, type: 2}
   headline01TextStyle: {fileID: 11400000, guid: 27d1d03301dee544b9672b4d44bb62e9, type: 2}
   headline02TextStyle: {fileID: 11400000, guid: c657161397b9164489f3c1cb011ba83b, type: 2}

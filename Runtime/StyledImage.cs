@@ -71,19 +71,20 @@ namespace AlexH.AdvancedGUI
             }
         }
         
-#if UNITY_EDITOR   
+   
         public override void OnBeforeSerialize()
         {
-            base.OnBeforeSerialize();
 
+            base.OnBeforeSerialize();
+#if UNITY_EDITOR
             if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating) return;
             
             LoadStyle();
             
             EditorUtility.SetDirty(gameObject);
-
-        }
 #endif
+        }
+
     }
 }
 

@@ -88,15 +88,17 @@ namespace AlexH
         }
         
         
-#if UNITY_EDITOR
+
         public void OnBeforeSerialize()
         {
             
+#if UNITY_EDITOR
             if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isUpdating) return;
             
             LoadStyle();
             
             EditorUtility.SetDirty(gameObject);
+#endif
 
         }
 
@@ -104,6 +106,6 @@ namespace AlexH
         {
         }
         
-#endif
+
     }
 }

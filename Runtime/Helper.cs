@@ -228,13 +228,12 @@ namespace AlexH.AdvancedGUI
             ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
             //ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerExitHandler);
         }
-
+        
         public static Sequence ScaleBounce(RectTransform transform, float scaleDelta, float duration)
         {
             return DOTween.Sequence()
                 .Append(transform.DOScale(1f + scaleDelta, 0.15f).SetEase(Ease.OutCubic))
                 .Append(transform.DOScale(1f, duration).SetEase(Ease.OutCubic));
-            //.Append(transform.DOShakePosition(duration, strength));
         }
     }
 }

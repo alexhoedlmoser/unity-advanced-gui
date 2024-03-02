@@ -73,6 +73,8 @@ namespace AlexH.AdvancedGUI
         protected bool isPressed;
         protected bool isSelected;
 
+        private float _scaleDeltaOnClick = 0.0125f;
+
         #region Getter
 
         public Color GetDefaultColor()
@@ -99,9 +101,11 @@ namespace AlexH.AdvancedGUI
         
         public void OnBeforeSerialize()
         {
+#if UNITY_EDITOR
             LoadStyle();
             InitializeSelectable();
             EditorUtility.SetDirty(gameObject);
+#endif
         }
 
         protected virtual void Awake()
@@ -214,7 +218,6 @@ namespace AlexH.AdvancedGUI
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
             OnHover?.Invoke(this, true);
-
             isHovered = true;
             
             HoverState();
@@ -246,7 +249,7 @@ namespace AlexH.AdvancedGUI
         {
             if (scaleOnClick)
             {
-                ScaleBounce(scaleOnClick, 0.0125f, hoverTransitionDuration);
+                ScaleBounce(scaleOnClick, _scaleDeltaOnClick, hoverTransitionDuration);
             }
         }
         
@@ -255,19 +258,13 @@ namespace AlexH.AdvancedGUI
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
             OnPressed?.Invoke(this, true);
-
             isPressed = true;
             
             PressedState();
-
-            
-           
         }
 
         public virtual void OnPointerUp(PointerEventData eventData)
         {
-            //if (!isPressed) return;
-            
             OnPressed?.Invoke(this, false);
             isPressed = false;
 
