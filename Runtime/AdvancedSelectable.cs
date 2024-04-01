@@ -55,7 +55,7 @@ namespace AlexH.AdvancedGUI
         protected float hoverLabelCharacterSpacing;
         
         protected float hoverSizeDelta;
-        protected float hoverTransitionDuration;
+        protected float transitionDuration;
         protected float pressedSizeDelta;
 
         #endregion
@@ -162,7 +162,7 @@ namespace AlexH.AdvancedGUI
             disabledColor = currentStyle.disabledColor;
             
             hoverSizeDelta = currentStyle.hoverSizeDelta;
-            hoverTransitionDuration = currentStyle.hoverTransitionDuration;
+            transitionDuration = currentStyle.transitionDuration;
             pressedSizeDelta = currentStyle.pressedSizeDelta;
             #endregion
 
@@ -249,7 +249,7 @@ namespace AlexH.AdvancedGUI
         {
             if (scaleOnClick)
             {
-                ScaleBounce(scaleOnClick, _scaleDeltaOnClick, hoverTransitionDuration);
+                ScaleBounce(scaleOnClick, _scaleDeltaOnClick, transitionDuration);
             }
         }
         
@@ -291,7 +291,7 @@ namespace AlexH.AdvancedGUI
             label.fontStyle = defaultFontStyle;
             
             currentSequence?.Kill();
-            currentSequence = ToDefaultSequence(hoverTransitionDuration);
+            currentSequence = ToDefaultSequence(transitionDuration);
         }
         
         protected virtual void DefaultStateInstant()
@@ -333,7 +333,7 @@ namespace AlexH.AdvancedGUI
             label.fontStyle = hoverFontStyle;
             
             currentSequence?.Kill();
-            currentSequence = ToHoverSequence(hoverTransitionDuration, isSelected);
+            currentSequence = ToHoverSequence(transitionDuration, isSelected);
         }
 
         protected virtual void PressedState()
@@ -356,7 +356,7 @@ namespace AlexH.AdvancedGUI
             label.fontStyle = selectedFontStyle;
             
             currentSequence?.Kill();
-            currentSequence = ToSelectedSequence(hoverTransitionDuration);
+            currentSequence = ToSelectedSequence(transitionDuration);
         }
         
         protected virtual void SelectedStateInstant()
@@ -398,7 +398,7 @@ namespace AlexH.AdvancedGUI
             {
                 StopCoroutine(_characterSpacingTween);
             }
-            _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, hoverLabelCharacterSpacing, hoverTransitionDuration));
+            _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, hoverLabelCharacterSpacing, transitionDuration));
 
             return sequence;
         }
@@ -417,7 +417,7 @@ namespace AlexH.AdvancedGUI
             {
                 StopCoroutine(_characterSpacingTween);
             }
-            _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, defaultLabelCharacterSpacing, hoverTransitionDuration));
+            _characterSpacingTween = StartCoroutine(TweenCharacterSpacing(label, defaultLabelCharacterSpacing, transitionDuration));
 
             return sequence;
         }

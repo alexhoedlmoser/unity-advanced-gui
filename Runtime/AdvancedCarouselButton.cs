@@ -226,18 +226,18 @@ namespace AlexH.AdvancedGUI
         {
             base.DefaultState();
 
-            FadeImagesWithAlpha(hoverHighlightImages, defaultContentColor, hoverHighlightAlpha, hoverTransitionDuration);
+            FadeImagesWithAlpha(hoverHighlightImages, defaultContentColor, hoverHighlightAlpha, transitionDuration);
             
             if (!_leftSideHovered)
             {
-                FadeImageWithAlpha(leftArrowImage, defaultColor, 1f, hoverTransitionDuration);
-                FadeImageWithAlpha(leftArrowBackgroundImage, defaultContentColor, 1f, hoverTransitionDuration);
+                FadeImageWithAlpha(leftArrowImage, defaultColor, 1f, transitionDuration);
+                FadeImageWithAlpha(leftArrowBackgroundImage, defaultContentColor, 1f, transitionDuration);
             }
             
             if (!_rightSideHovered)
             {
-                FadeImageWithAlpha(rightArrowImage, defaultColor, 1f, hoverTransitionDuration);
-                FadeImageWithAlpha(rightArrowBackgroundImage, defaultContentColor, 1f, hoverTransitionDuration);
+                FadeImageWithAlpha(rightArrowImage, defaultColor, 1f, transitionDuration);
+                FadeImageWithAlpha(rightArrowBackgroundImage, defaultContentColor, 1f, transitionDuration);
             }
 
             valueText.color = defaultContentColor;
@@ -281,18 +281,18 @@ namespace AlexH.AdvancedGUI
         {
             base.HoverState();
 
-            FadeImagesWithAlpha(hoverHighlightImages, hoverContentColor, hoverHighlightAlpha, hoverTransitionDuration);
+            FadeImagesWithAlpha(hoverHighlightImages, hoverContentColor, hoverHighlightAlpha, transitionDuration);
 
             if (!_leftSideHovered)
             {
-                FadeImageWithAlpha(leftArrowImage, hoverContentColor, 1f, hoverTransitionDuration);
-                FadeImageWithAlpha(leftArrowBackgroundImage, hoverColor, 1f, hoverTransitionDuration);
+                FadeImageWithAlpha(leftArrowImage, hoverContentColor, 1f, transitionDuration);
+                FadeImageWithAlpha(leftArrowBackgroundImage, hoverColor, 1f, transitionDuration);
             }
             
             if (!_rightSideHovered)
             {
-                FadeImageWithAlpha(rightArrowImage, hoverContentColor, 1f, hoverTransitionDuration);
-                FadeImageWithAlpha(rightArrowBackgroundImage, hoverColor, 1f, hoverTransitionDuration);
+                FadeImageWithAlpha(rightArrowImage, hoverContentColor, 1f, transitionDuration);
+                FadeImageWithAlpha(rightArrowBackgroundImage, hoverColor, 1f, transitionDuration);
             }
             
             valueText.color = hoverContentColor;
@@ -309,7 +309,7 @@ namespace AlexH.AdvancedGUI
             sequence = DOTween.Sequence()
                 .Append(carouselBarTransform.DOSizeDelta(
                     new Vector2(_carouselBarDefaultSize.x, _carouselBarDefaultSize.y + carouselBarHoverHeightDelta),
-                    hoverTransitionDuration).SetEase(Ease.OutCubic));
+                    transitionDuration).SetEase(Ease.OutCubic));
                 
             return sequence;
         }
@@ -320,7 +320,7 @@ namespace AlexH.AdvancedGUI
             
             sequence = DOTween.Sequence()
                 .Append(carouselBarTransform.DOSizeDelta(
-                    _carouselBarDefaultSize, hoverTransitionDuration).SetEase(Ease.OutCubic));
+                    _carouselBarDefaultSize, transitionDuration).SetEase(Ease.OutCubic));
             
             return sequence;
         }
@@ -332,10 +332,10 @@ namespace AlexH.AdvancedGUI
             sequence = DOTween.Sequence()
                 .Append(leftHoverHighlightTransform.DOSizeDelta(
                     new Vector2(carouselBarTransform.sizeDelta.x, 0),
-                    hoverTransitionDuration*2).SetEase(Ease.OutCubic))
-                .Join(_leftArrowTransform.DOScale(1.25f, hoverTransitionDuration).SetEase(Ease.OutCubic))
-                .Join(FadeImageWithAlpha(leftArrowImage, hoverColor, 1f, hoverTransitionDuration))
-                .Join(FadeImageWithAlpha(leftArrowBackgroundImage, hoverContentColor, 1f, hoverTransitionDuration));
+                    transitionDuration*2).SetEase(Ease.OutCubic))
+                .Join(_leftArrowTransform.DOScale(1.25f, transitionDuration).SetEase(Ease.OutCubic))
+                .Join(FadeImageWithAlpha(leftArrowImage, hoverColor, 1f, transitionDuration))
+                .Join(FadeImageWithAlpha(leftArrowBackgroundImage, hoverContentColor, 1f, transitionDuration));
             
             return sequence;
         }
@@ -347,10 +347,10 @@ namespace AlexH.AdvancedGUI
             sequence = DOTween.Sequence()
                 .Append(rightHoverHighlightTransform.DOSizeDelta(
                     new Vector2(carouselBarTransform.sizeDelta.x, 0),
-                    hoverTransitionDuration*2).SetEase(Ease.OutCubic))
-                .Join(_rightArrowTransform.DOScale(1.25f, hoverTransitionDuration).SetEase(Ease.OutCubic))
-                .Join(FadeImageWithAlpha(rightArrowImage, hoverColor, 1f, hoverTransitionDuration))
-                .Join(FadeImageWithAlpha(rightArrowBackgroundImage, hoverContentColor, 1f, hoverTransitionDuration));
+                    transitionDuration*2).SetEase(Ease.OutCubic))
+                .Join(_rightArrowTransform.DOScale(1.25f, transitionDuration).SetEase(Ease.OutCubic))
+                .Join(FadeImageWithAlpha(rightArrowImage, hoverColor, 1f, transitionDuration))
+                .Join(FadeImageWithAlpha(rightArrowBackgroundImage, hoverContentColor, 1f, transitionDuration));
             
             return sequence;
         }
@@ -362,10 +362,10 @@ namespace AlexH.AdvancedGUI
             sequence = DOTween.Sequence()
                 .Append(leftHoverHighlightTransform.DOSizeDelta(
                     new Vector2(0, 0),
-                    hoverTransitionDuration*2).SetEase(Ease.InCubic))
-                .Join(_leftArrowTransform.DOScale(1f, hoverTransitionDuration).SetEase(Ease.InCubic))
-                .Join(FadeImageWithAlpha(leftArrowImage, hoverContentColor, 1f, hoverTransitionDuration))
-                .Join(FadeImageWithAlpha(leftArrowBackgroundImage, hoverColor, 1f, hoverTransitionDuration));
+                    transitionDuration*2).SetEase(Ease.InCubic))
+                .Join(_leftArrowTransform.DOScale(1f, transitionDuration).SetEase(Ease.InCubic))
+                .Join(FadeImageWithAlpha(leftArrowImage, hoverContentColor, 1f, transitionDuration))
+                .Join(FadeImageWithAlpha(leftArrowBackgroundImage, hoverColor, 1f, transitionDuration));
             
             return sequence;
         }
@@ -377,10 +377,10 @@ namespace AlexH.AdvancedGUI
             sequence = DOTween.Sequence()
                 .Append(rightHoverHighlightTransform.DOSizeDelta(
                     new Vector2(0, 0),
-                    hoverTransitionDuration*2).SetEase(Ease.InCubic))
-                .Join(_rightArrowTransform.DOScale(1f, hoverTransitionDuration).SetEase(Ease.InCubic))
-                .Join(FadeImageWithAlpha(rightArrowImage, hoverContentColor, 1f, hoverTransitionDuration))
-                .Join(FadeImageWithAlpha(rightArrowBackgroundImage, hoverColor, 1f, hoverTransitionDuration));
+                    transitionDuration*2).SetEase(Ease.InCubic))
+                .Join(_rightArrowTransform.DOScale(1f, transitionDuration).SetEase(Ease.InCubic))
+                .Join(FadeImageWithAlpha(rightArrowImage, hoverContentColor, 1f, transitionDuration))
+                .Join(FadeImageWithAlpha(rightArrowBackgroundImage, hoverColor, 1f, transitionDuration));
             
             return sequence;
         }

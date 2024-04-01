@@ -16,7 +16,7 @@ namespace AlexH.AdvancedGUI.Editor
         private string _themeName = "";
 
         private Color _baseColor = new Color(0.1f, 0.1f, 0.1f);
-        private Color _highlightColor = new Color(0.9f, 0.9f, 0.9f, 0.75f);
+        private Color _keyColor = new Color(0.9f, 0.9f, 0.9f, 0.75f);
         private Color _contrastColor = new Color(0.15f, 0.15f, 0.15f);
         private Color _headlineColor = Color.white;
         private Color _paragraphColor = new Color(0.9f, 0.9f, 0.9f);
@@ -63,7 +63,7 @@ namespace AlexH.AdvancedGUI.Editor
             GUILayout.Space(10);
             
             _baseColor = EditorGUILayout.ColorField("Base Color", _baseColor);
-            _highlightColor = EditorGUILayout.ColorField("Highlight Color", _highlightColor);
+            _keyColor = EditorGUILayout.ColorField("Highlight Color", _keyColor);
             _contrastColor = EditorGUILayout.ColorField("Contrast Color", _contrastColor);
             _headlineColor = EditorGUILayout.ColorField("Headline Color", _headlineColor);
             _paragraphColor = EditorGUILayout.ColorField("Paragraph Color", _paragraphColor);
@@ -106,7 +106,7 @@ namespace AlexH.AdvancedGUI.Editor
             CreateTextStylingObject("Headline03", _headlineColor,32f, 10f, _headlineFontWeight);
             CreateTextStylingObject("Breadcrumb", _paragraphColor,32f, 0f, FontWeight.Regular);
             CreateTextStylingObject("Paragraph", _paragraphColor, 20f, 0f, FontWeight.Regular);
-            CreateTextStylingObject("Value", _highlightColor, 20f, 0f, FontWeight.Regular, true);
+            CreateTextStylingObject("Value", _keyColor, 20f, 0f, FontWeight.Regular, true);
             
             CreateImageStylingObject("Background", _baseColor, 0.5f, 0.05f, _frameSprite, _frameImageMode);
         }
@@ -214,11 +214,11 @@ namespace AlexH.AdvancedGUI.Editor
             defaultSelectableStyle.name = _themeName + "_DefaultSelectable";
             
             defaultSelectableStyle.defaultColor = ColorModifyAlpha(_baseColor, 0.75f);
-            defaultSelectableStyle.hoverColor = _highlightColor;
-            defaultSelectableStyle.pressedColor = ColorModifyAlpha(_highlightColor, 1f);
+            defaultSelectableStyle.hoverColor = _keyColor;
+            defaultSelectableStyle.pressedColor = ColorModifyAlpha(_keyColor, 1f);
             defaultSelectableStyle.disabledColor = ColorModifyAlpha(_baseColor, 0.25f);
             
-            defaultSelectableStyle.defaultContentColor = _highlightColor;
+            defaultSelectableStyle.defaultContentColor = _keyColor;
             defaultSelectableStyle.hoverContentColor = _contrastColor;
             defaultSelectableStyle.pressedContentColor = ColorModifyAlpha(_contrastColor, 1f);
             
@@ -242,11 +242,11 @@ namespace AlexH.AdvancedGUI.Editor
             settingsSelectableStyle.name = _themeName + "_SettingsSelectable";
             
             settingsSelectableStyle.defaultColor = ColorModifyAlpha(_baseColor, 0.75f);
-            settingsSelectableStyle.hoverColor = _highlightColor;
-            settingsSelectableStyle.pressedColor = ColorModifyAlpha(_highlightColor, 1f);
+            settingsSelectableStyle.hoverColor = _keyColor;
+            settingsSelectableStyle.pressedColor = ColorModifyAlpha(_keyColor, 1f);
             settingsSelectableStyle.disabledColor = ColorModifyAlpha(_baseColor, 0.25f);
 
-            settingsSelectableStyle.defaultContentColor = _highlightColor;
+            settingsSelectableStyle.defaultContentColor = _keyColor;
             settingsSelectableStyle.hoverContentColor = _contrastColor;
             settingsSelectableStyle.pressedContentColor = ColorModifyAlpha(_contrastColor, 1f);
 
@@ -270,12 +270,12 @@ namespace AlexH.AdvancedGUI.Editor
             navButtonStyle.name = _themeName + "_NavButton";
             
             navButtonStyle.defaultColor = ColorModifyAlpha(_baseColor, 0f);
-            navButtonStyle.hoverColor = ColorModifyAlpha(_highlightColor, 0.15f);
-            navButtonStyle.pressedColor = ColorModifyAlpha(_highlightColor, 1f);
+            navButtonStyle.hoverColor = ColorModifyAlpha(_keyColor, 0.15f);
+            navButtonStyle.pressedColor = ColorModifyAlpha(_keyColor, 1f);
             navButtonStyle.disabledColor = ColorModifyAlpha(_baseColor, 0f);
 
-            navButtonStyle.defaultContentColor = _highlightColor;
-            navButtonStyle.hoverContentColor = ColorModifyAlpha(_highlightColor, 1f);
+            navButtonStyle.defaultContentColor = _keyColor;
+            navButtonStyle.hoverContentColor = ColorModifyAlpha(_keyColor, 1f);
             navButtonStyle.pressedContentColor = ColorModifyAlpha(_contrastColor, 1f);
 
             navButtonStyle.textFontAsset = _font;

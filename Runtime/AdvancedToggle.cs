@@ -131,9 +131,9 @@ namespace AlexH.AdvancedGUI
         protected override void DefaultState()
         {
             base.DefaultState();
-            FadeImageWithAlpha(toggleFrameImage, defaultContentColor, 1f, hoverTransitionDuration);
-            FadeImageWithAlpha(toggleKnobImage, defaultContentColor, 1f, hoverTransitionDuration);
-            FadeImageWithAlpha(toggleFillImage, defaultContentColor, 0.5f, hoverTransitionDuration);
+            FadeImageWithAlpha(toggleFrameImage, defaultContentColor, 1f, transitionDuration);
+            FadeImageWithAlpha(toggleKnobImage, defaultContentColor, 1f, transitionDuration);
+            FadeImageWithAlpha(toggleFillImage, defaultContentColor, 0.5f, transitionDuration);
 
             valueText.color = defaultContentColor;
             valueText.fontWeight = defaultFontWeight;
@@ -166,9 +166,9 @@ namespace AlexH.AdvancedGUI
         {
             base.HoverState();
             
-            FadeImageWithAlpha(toggleFrameImage, hoverContentColor, 1f, hoverTransitionDuration);
-            FadeImageWithAlpha(toggleKnobImage, hoverContentColor, 1f, hoverTransitionDuration);
-            FadeImageWithAlpha(toggleFillImage, hoverContentColor, 0.75f, hoverTransitionDuration);
+            FadeImageWithAlpha(toggleFrameImage, hoverContentColor, 1f, transitionDuration);
+            FadeImageWithAlpha(toggleKnobImage, hoverContentColor, 1f, transitionDuration);
+            FadeImageWithAlpha(toggleFillImage, hoverContentColor, 0.75f, transitionDuration);
             
             valueText.color = hoverContentColor;
             valueText.fontWeight = hoverFontWeight;
@@ -191,7 +191,7 @@ namespace AlexH.AdvancedGUI
             sequence = DOTween.Sequence()
                 .Append(toggleTransform.DOSizeDelta(
                     new Vector2(_toggleDefaultSize.x, _toggleDefaultSize.y + toggleHoverHeightDelta),
-                    hoverTransitionDuration).SetEase(Ease.OutCubic));
+                    transitionDuration).SetEase(Ease.OutCubic));
                 
             return sequence;
         }
@@ -202,7 +202,7 @@ namespace AlexH.AdvancedGUI
             
             sequence = DOTween.Sequence()
                 .Append(toggleTransform.DOSizeDelta(
-                    _toggleDefaultSize, hoverTransitionDuration).SetEase(Ease.OutCubic));
+                    _toggleDefaultSize, transitionDuration).SetEase(Ease.OutCubic));
             
             return sequence;
         }
@@ -215,14 +215,14 @@ namespace AlexH.AdvancedGUI
             {
                 sequence = DOTween.Sequence()
                     .Append(_toggleFillTransform
-                        .DOSizeDelta(_toggleFillSize, hoverTransitionDuration)
+                        .DOSizeDelta(_toggleFillSize, transitionDuration)
                         .SetEase(Ease.OutCubic));
             }
             else
             {
                 sequence = DOTween.Sequence()
                     .Append(_toggleFillTransform
-                        .DOSizeDelta(new Vector2(_toggleKnobSize.x, _toggleFillSize.y), hoverTransitionDuration)
+                        .DOSizeDelta(new Vector2(_toggleKnobSize.x, _toggleFillSize.y), transitionDuration)
                         .SetEase(Ease.OutCubic));
             }
 

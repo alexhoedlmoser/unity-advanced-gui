@@ -88,8 +88,8 @@ namespace AlexH
         protected override void DefaultState()
         {
             base.DefaultState();
-            FadeImagesWithAlpha(sliderFrameImages, defaultContentColor, 1f, hoverTransitionDuration);
-            FadeImageWithAlpha(sliderHandleImage, defaultColor, 1f, hoverTransitionDuration);
+            FadeImagesWithAlpha(sliderFrameImages, defaultContentColor, 1f, transitionDuration);
+            FadeImageWithAlpha(sliderHandleImage, defaultColor, 1f, transitionDuration);
             
             valueText.color = defaultContentColor;
             valueText.fontWeight = defaultFontWeight;
@@ -122,8 +122,8 @@ namespace AlexH
         {
             base.HoverState();
             
-            FadeImagesWithAlpha(sliderFrameImages, hoverContentColor, 1f, hoverTransitionDuration);
-            FadeImageWithAlpha(sliderHandleImage, hoverColor, 1f, hoverTransitionDuration);
+            FadeImagesWithAlpha(sliderFrameImages, hoverContentColor, 1f, transitionDuration);
+            FadeImageWithAlpha(sliderHandleImage, hoverColor, 1f, transitionDuration);
             valueText.color = hoverContentColor;
             valueText.fontWeight = hoverFontWeight;
             
@@ -145,7 +145,7 @@ namespace AlexH
             sequence = DOTween.Sequence()
                 .Append(_sliderTransform.DOSizeDelta(
                     new Vector2(_sliderDefaultSize.x, _sliderDefaultSize.y + sliderHoverHeightDelta),
-                    hoverTransitionDuration).SetEase(Ease.OutCubic));
+                    transitionDuration).SetEase(Ease.OutCubic));
                 
             return sequence;
         }
@@ -156,7 +156,7 @@ namespace AlexH
             
             sequence = DOTween.Sequence()
                 .Append(_sliderTransform.DOSizeDelta(
-                    _sliderDefaultSize, hoverTransitionDuration).SetEase(Ease.OutCubic));
+                    _sliderDefaultSize, transitionDuration).SetEase(Ease.OutCubic));
             
             return sequence;
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Mime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static AlexH.AdvancedGUI.Helper;
 
@@ -43,8 +44,8 @@ namespace AlexH.AdvancedGUI
         public TransitionType transitionType;
         [Space]
         public float hoverSizeDelta = -10f;
-        public float hoverTransitionDuration = 0.1f;
         public float hoverLabelCharacterSpacing = 15f;
         public float pressedSizeDelta = 50f;
+        public float transitionDuration = 0.1f;
     }
 }

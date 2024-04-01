@@ -13,7 +13,7 @@ namespace AlexH.AdvancedGUI
 
         public void TestIntEventMethod(int index)
         {
-            print("Current carousel setting index: " + index);
+            //print("Current carousel setting index: " + index);
             carouselButton.UpdateCarouselDisplay(options[index]);
         }
 
