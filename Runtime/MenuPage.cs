@@ -75,6 +75,7 @@ namespace AlexH.AdvancedGUI
             {
                 _rectTransform = GetComponent<RectTransform>();
             }
+            
             defaultPosition = _rectTransform.localPosition;
         }
         

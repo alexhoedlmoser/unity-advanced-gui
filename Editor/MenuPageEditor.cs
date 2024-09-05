@@ -22,10 +22,7 @@ namespace AlexH.AdvancedGUI.Editor
             {
                 menuPageScript.SetDefaultPosition();
             }
-            {
-                menuPageScript.SetDefaultPosition();
-            }
-            
+
             GUILayout.Space(10);
             
             GUI.backgroundColor = Color.green;
