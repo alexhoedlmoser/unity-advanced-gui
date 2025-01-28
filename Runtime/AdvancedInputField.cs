@@ -33,7 +33,6 @@ public class AdvancedInputField : AdvancedSelectable
     {
         if (!_isInEditMode) return;
         
-        print("deselect");
         if (_menuPage)
         {
             _menuPage.ActivateShortcuts();
@@ -46,7 +45,6 @@ public class AdvancedInputField : AdvancedSelectable
     {
         if (_isInEditMode) return;
         
-        print("select");
         if (_menuPage)
         {
             _menuPage.DeactivateShortcuts();
