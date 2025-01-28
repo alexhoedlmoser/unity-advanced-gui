@@ -1,12 +1,10 @@
 using System;
-using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using UnityEditor;
-using UnityEngine.Serialization;
 using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using AlexH.AdvancedGUI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 
 public class AdvancedInputField : AdvancedSelectable
 {

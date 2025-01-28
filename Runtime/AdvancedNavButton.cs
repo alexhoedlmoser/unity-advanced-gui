@@ -1,8 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using AlexH.AdvancedGUI;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

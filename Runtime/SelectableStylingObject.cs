@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Mime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using static AlexH.AdvancedGUI.Helper;
 
 
 namespace AlexH.AdvancedGUI

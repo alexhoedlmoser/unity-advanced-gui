@@ -1,18 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using AlexH.AdvancedGUI;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
-using static AlexH.AdvancedGUI.Helper;
 
 namespace AlexH.AdvancedGUI
 {
     [AddComponentMenu("Advanced GUI/Menu Page")]
-    [System.Serializable]
+    [Serializable]
     public class MenuPageTransition
     {
         public string key;
@@ -68,6 +61,11 @@ namespace AlexH.AdvancedGUI
         private void OnDestroy()
         {
             _currentSequence?.Kill();
+        }
+        
+        private void OnDisable()
+        {
+            DeactivateShortcuts();
         }
 
         #region Editor Methods
@@ -151,8 +149,6 @@ namespace AlexH.AdvancedGUI
             
             ActivateShortcuts();
             
-            _navigationBar?.ActivateShortcut();
-            
             _canvasGroup.interactable = true;
             _canvasGroup.blocksRaycasts = true;
         }
@@ -204,7 +200,7 @@ namespace AlexH.AdvancedGUI
         public void PlayFadeOut(GradientType transitionDirection, float duration)
         {
             _currentSequence?.Kill();
-            _currentSequence = PageFadeOutSequence(transitionDirection, duration).OnComplete((() => gameObject.SetActive(false)));
+            _currentSequence = PageFadeOutSequence(transitionDirection, duration).OnComplete(() => gameObject.SetActive(false));
         }
         
         public void PlayFadeIn(GradientType transitionDirection, float duration)
@@ -229,6 +225,5 @@ namespace AlexH.AdvancedGUI
                 }
             }
         }
-        
     }
 }
