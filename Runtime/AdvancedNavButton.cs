@@ -12,12 +12,6 @@ namespace AlexH.AdvancedGUI
     public class AdvancedNavButton : AdvancedSelectable
     {
         public event Action<AdvancedNavButton> OnSelected;
-        //public bool isSelected;
-
-        protected override void Start()
-        {
-            base.Start();
-        }
         
         public override void OnPointerClick(PointerEventData eventData)
         {

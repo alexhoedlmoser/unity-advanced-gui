@@ -43,6 +43,8 @@ namespace AlexH.AdvancedGUI
 
         [Header("Settings")]
         [SerializeField] private Vector3 defaultPosition = Vector3.zero;
+        [Tooltip("If false, uses actual Screen resolution")] 
+        [SerializeField] private bool useReferenceScreenSize = true;
         [SerializeField] private int referenceScreenWidth = 1920;
         [SerializeField] private int referenceScreenHeight = 1080;
 
@@ -53,12 +55,14 @@ namespace AlexH.AdvancedGUI
         private RectTransform _rectTransform;
         private Sequence _currentSequence;
         private AdvancedButton[] _childrenButtons;
+        private NavigationBar _navigationBar;
 
         private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             _rectTransform = GetComponent<RectTransform>();
             _childrenButtons = GetComponentsInChildren<AdvancedButton>(includeInactive: true);
+            _navigationBar = GetComponentInChildren<NavigationBar>(includeInactive: true);
         }
 
         private void OnDestroy()
@@ -114,22 +118,25 @@ namespace AlexH.AdvancedGUI
         private Vector3 GetPositionDeltaFromGradient(GradientType gradientType)
         {
             Vector3 deltaVector = Vector3.zero;
+            
+            int screenWidth = useReferenceScreenSize ? referenceScreenWidth : Screen.width;
+            int screenHeight = useReferenceScreenSize ? referenceScreenHeight : Screen.height;
 
             switch (gradientType)
             {
                 case GradientType.None:
                     break;
                 case GradientType.LeftToRight:
-                    deltaVector = new Vector3(-referenceScreenWidth, 0, 0);
+                    deltaVector = new Vector3(-screenWidth, 0, 0);
                     break;
                 case GradientType.RightToLeft:
-                    deltaVector = new Vector3(referenceScreenWidth, 0, 0);
+                    deltaVector = new Vector3(screenWidth, 0, 0);
                     break;
                 case GradientType.TopToBottom:
-                    deltaVector = new Vector3(0, referenceScreenHeight, 0);
+                    deltaVector = new Vector3(0, screenHeight, 0);
                     break;
                 case GradientType.BottomToTop:
-                    deltaVector = new Vector3(0, -referenceScreenHeight, 0);
+                    deltaVector = new Vector3(0, -screenHeight, 0);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(gradientType), gradientType, null);
@@ -142,11 +149,9 @@ namespace AlexH.AdvancedGUI
         {
             gameObject.SetActive(true);
             
-            //SoundManager.Instance.OpenMenu();
-            foreach (AdvancedButton button in _childrenButtons)
-            {
-                button.ActivateShortcut();
-            }
+            ActivateShortcuts();
+            
+            _navigationBar?.ActivateShortcut();
             
             _canvasGroup.interactable = true;
             _canvasGroup.blocksRaycasts = true;
@@ -154,14 +159,30 @@ namespace AlexH.AdvancedGUI
         
         public void DeactivatePage()
         {
-            //SoundManager.Instance.CloseMenu();
+            DeactivateShortcuts();
+            
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+        }
+        
+        public void ActivateShortcuts()
+        {
+            foreach (AdvancedButton button in _childrenButtons)
+            {
+                button.ActivateShortcut();
+            }
+            
+            _navigationBar?.ActivateShortcut();
+        }
+        
+        public void DeactivateShortcuts()
+        {
             foreach (AdvancedButton button in _childrenButtons)
             {
                 button.DeactivateShortcut();
             }
             
-            _canvasGroup.interactable = false;
-            _canvasGroup.blocksRaycasts = false;
+            _navigationBar?.DeactivateShortcut();
         }
 
         public Sequence PageFadeOutSequence(GradientType transitionDirection, float duration)

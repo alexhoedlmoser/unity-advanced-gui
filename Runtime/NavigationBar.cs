@@ -29,9 +29,6 @@ namespace AlexH
             {
                 navButton.OnSelected += OnButtonSelectedHandler;
             }
-
-            previousPageInputAction.action.performed += OnPreviousPageInput;
-            nextPageInputAction.action.performed += OnNextPageInput;
             
             StartCoroutine(navButtons[0].SelectButtonOnStartDelayed());
         }
@@ -52,9 +49,6 @@ namespace AlexH
             {
                 navButton.OnSelected -= OnButtonSelectedHandler;
             }
-            
-            previousPageInputAction.action.performed -= OnPreviousPageInput;
-            nextPageInputAction.action.performed -= OnNextPageInput;
         }
 
         private void OnButtonSelectedHandler(AdvancedNavButton navButton)
@@ -82,7 +76,6 @@ namespace AlexH
             //menuPages[menuIndex].gameObject.SetActive(true);
             menuPages[menuIndex].blocksRaycasts = true;
             menuPages[menuIndex].alpha = 1f;
-           
         }
 
         private void NextPage()
@@ -111,6 +104,22 @@ namespace AlexH
                 SimulateButtonClick(navButtons[_currentNavIndex - 1].gameObject);
                 //navButtons[_currentNavIndex - 1].SelectButton();
             }
+        }
+
+        public void DeactivateShortcut()
+        {
+            if (previousPageInputAction == null || nextPageInputAction == null) return;
+            
+            previousPageInputAction.action.performed -= OnPreviousPageInput;
+            nextPageInputAction.action.performed -= OnNextPageInput;
+        }
+        
+        public void ActivateShortcut()
+        {
+            if (previousPageInputAction == null || nextPageInputAction == null) return;
+            
+            previousPageInputAction.action.performed += OnPreviousPageInput;
+            nextPageInputAction.action.performed += OnNextPageInput;
         }
     }
 }

@@ -229,6 +229,7 @@ namespace AlexH.AdvancedGUI
             //ExecuteEvents.Execute (button, new PointerEventData(EventSystem.current), ExecuteEvents.pointerExitHandler);
         }
         
+        
         public static Sequence ScaleBounce(RectTransform transform, float scaleDelta, float duration)
         {
             return DOTween.Sequence()

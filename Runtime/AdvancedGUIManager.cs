@@ -20,6 +20,7 @@ namespace AlexH.AdvancedGUI
         private AdvancedSlider[] _advancedSliders;
         private AdvancedToggle[] _advancedToggles;
         private AdvancedCarouselButton[] _advancedCarouselButtons;
+        private AdvancedInputField[] _advancedInputFields;
 
         public void OnBeforeSerialize()
         {
@@ -119,6 +120,11 @@ namespace AlexH.AdvancedGUI
             {
                 carouselButton.SetStyle(theme.settingsButtonStyle);
             }
+            
+            foreach (AdvancedInputField inputField in _advancedInputFields)
+            {
+                inputField.SetStyle(theme.settingsButtonStyle);
+            }
         }
 
         private void FindStyledObjects()
@@ -130,6 +136,7 @@ namespace AlexH.AdvancedGUI
             _advancedSliders = FindObjectsByType<AdvancedSlider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _advancedToggles = FindObjectsByType<AdvancedToggle>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _advancedCarouselButtons = FindObjectsByType<AdvancedCarouselButton>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            _advancedInputFields = FindObjectsByType<AdvancedInputField>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         }
     }
     
