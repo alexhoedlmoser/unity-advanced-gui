@@ -7,7 +7,7 @@ using UnityEditor.Graphs;
 
 namespace AlexH.AdvancedGUI.Editor
 {
-    [CustomEditor(typeof(MenuPage))]
+    [CustomEditor(typeof(MenuPage)), CanEditMultipleObjects]
     public class MenuPageEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace AlexH.AdvancedGUI.Editor
 {
-    [CustomEditor(typeof(StyledImage))]
+    [CustomEditor(typeof(StyledImage)), CanEditMultipleObjects]
     public class StyledImageEditor : UnityEditor.UI.ImageEditor
     {
         public override void OnInspectorGUI()

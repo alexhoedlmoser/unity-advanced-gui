@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace AlexH.AdvancedGUI.Editor
 {
-    [CustomEditor(typeof(StyledText))]
+    [CustomEditor(typeof(StyledText)), CanEditMultipleObjects]
     public class StyledTextEditor : TMPro.EditorUtilities.TMP_EditorPanelUI
     {
         public override void OnInspectorGUI()
