@@ -36,6 +36,7 @@ namespace AlexH.AdvancedGUI
         [SerializeField] private AdvancedButton backButton;
 
         [Header("Settings")]
+        [SerializeField] private bool _useParallaxEffect = true;
         [SerializeField] private Vector3 defaultPosition = Vector3.zero;
         [Tooltip("If false, uses actual Screen resolution")] 
         [SerializeField] private bool useReferenceScreenSize = true;
@@ -101,7 +102,7 @@ namespace AlexH.AdvancedGUI
                 _mouseParallax = GetComponentInChildren<MouseParallax>(includeInactive: true);
             }
             
-            if (_mouseParallax) _mouseParallax.enabled = true;
+            if (_mouseParallax && _useParallaxEffect) _mouseParallax.enabled = true;
             
             if (!_canvasGroup)
             {
@@ -138,8 +139,6 @@ namespace AlexH.AdvancedGUI
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
             _canvas.enabled = false;
-            
-            if (_mouseParallax) _mouseParallax.enabled = false;
         }
 
         #endregion
@@ -228,19 +227,18 @@ namespace AlexH.AdvancedGUI
 
         public void PlayFadeOut(GradientType transitionDirection, float duration)
         {
+            if (_mouseParallax) _mouseParallax.enabled = false;
             _currentSequence?.Kill();
             _currentSequence = PageFadeOutSequence(transitionDirection, duration).OnComplete(() =>
             {
                 _canvas.enabled = false;
-                if (_mouseParallax) _mouseParallax.enabled = false;
-               
             });
         }
         
         public void PlayFadeIn(GradientType transitionDirection, float duration)
         {
             _canvas.enabled = true;
-            if (_mouseParallax) _mouseParallax.enabled = true;
+            if (_mouseParallax && _useParallaxEffect) _mouseParallax.enabled = true;
             
             _currentSequence?.Kill();
             _currentSequence = PageFadeInSequence(transitionDirection, duration);
