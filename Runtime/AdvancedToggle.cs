@@ -61,19 +61,6 @@ namespace AlexH.AdvancedGUI
             _currentToggleFillSequence?.Kill();
             _currentToggleFillSequence = ToggleFillSequence(isToggled);
         }
-
-        public void ToggleTestEventMethod(bool toggle)
-        {
-            if (toggle)
-            {
-                print(name +  " is enabled");
-            }
-            else
-            {
-                print(name +  " is disabled");
-            }
-           
-        }
         
         protected override void Awake()
         {

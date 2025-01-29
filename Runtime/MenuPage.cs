@@ -52,11 +52,11 @@ namespace AlexH.AdvancedGUI
         private Sequence _currentSequence;
         private AdvancedButton[] _childrenButtons;
         private NavigationBar _navigationBar;
-        private MouseParallax _mouseParallax;
+        private MouseParallax[] _mouseParallax;
 
         private void Awake()
         {
-            _mouseParallax = GetComponentInChildren<MouseParallax>(includeInactive: true);
+            _mouseParallax = GetComponentsInChildren<MouseParallax>(includeInactive: true);
             _canvas = GetComponent<Canvas>();
             _canvasGroup = GetComponent<CanvasGroup>();
             _rectTransform = GetComponent<RectTransform>();
@@ -97,12 +97,15 @@ namespace AlexH.AdvancedGUI
             }
             _canvas.enabled = true;
 
-            if (!_mouseParallax)
+            _mouseParallax ??= GetComponentsInChildren<MouseParallax>(includeInactive: true);
+
+            if (_mouseParallax.Length > 0 && _useParallaxEffect)
             {
-                _mouseParallax = GetComponentInChildren<MouseParallax>(includeInactive: true);
+                foreach (MouseParallax mouseParallax in _mouseParallax)
+                {
+                    mouseParallax.enabled = true;
+                }
             }
-            
-            if (_mouseParallax && _useParallaxEffect) _mouseParallax.enabled = true;
             
             if (!_canvasGroup)
             {
@@ -123,12 +126,15 @@ namespace AlexH.AdvancedGUI
             }
             _canvas.enabled = false;
 
-            if (!_mouseParallax)
-            {
-                _mouseParallax = GetComponentInChildren<MouseParallax>(includeInactive: true);
-            }
+            _mouseParallax ??= GetComponentsInChildren<MouseParallax>(includeInactive: true);
             
-            if (_mouseParallax) _mouseParallax.enabled = false;
+            if (_mouseParallax.Length > 0 && _useParallaxEffect)
+            {
+                foreach (MouseParallax mouseParallax in _mouseParallax)
+                {
+                    mouseParallax.enabled = false;
+                }
+            }
             
             if (!_canvasGroup)
             {
@@ -227,7 +233,14 @@ namespace AlexH.AdvancedGUI
 
         public void PlayFadeOut(GradientType transitionDirection, float duration)
         {
-            if (_mouseParallax) _mouseParallax.enabled = false;
+            if (_mouseParallax.Length > 0)
+            {
+                foreach (MouseParallax mouseParallax in _mouseParallax)
+                {
+                    mouseParallax.enabled = false;
+                }
+            }
+            
             _currentSequence?.Kill();
             _currentSequence = PageFadeOutSequence(transitionDirection, duration).OnComplete(() =>
             {
@@ -238,7 +251,14 @@ namespace AlexH.AdvancedGUI
         public void PlayFadeIn(GradientType transitionDirection, float duration)
         {
             _canvas.enabled = true;
-            if (_mouseParallax && _useParallaxEffect) _mouseParallax.enabled = true;
+            
+            if (_mouseParallax.Length > 0 && _useParallaxEffect)
+            {
+                foreach (MouseParallax mouseParallax in _mouseParallax)
+                {
+                    mouseParallax.enabled = true;
+                }
+            }
             
             _currentSequence?.Kill();
             _currentSequence = PageFadeInSequence(transitionDirection, duration);
