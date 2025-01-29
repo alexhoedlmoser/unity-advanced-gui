@@ -19,15 +19,16 @@ namespace AlexH.AdvancedGUI
             {
                 return;
             }
+            
+            currentPage.PlayFadeOut(transitionDirection, transitionDuration);
+            nextPage.PlayFadeIn(transitionDirection, transitionDuration);
 
             currentPage.DeactivatePage();
             nextPage.ActivatePage();
-
-            currentPage.PlayFadeOut(transitionDirection, transitionDuration);
-            nextPage.PlayFadeIn(transitionDirection, transitionDuration);
         }
     }
     
+    [RequireComponent(typeof(Canvas))]
     [RequireComponent(typeof(CanvasGroup))]
     public class MenuPage : MonoBehaviour
     {
@@ -45,13 +46,17 @@ namespace AlexH.AdvancedGUI
         public MenuPageTransition[] transitions;
 
         private CanvasGroup _canvasGroup;
+        private Canvas _canvas;
         private RectTransform _rectTransform;
         private Sequence _currentSequence;
         private AdvancedButton[] _childrenButtons;
         private NavigationBar _navigationBar;
+        private MouseParallax _mouseParallax;
 
         private void Awake()
         {
+            _mouseParallax = GetComponentInChildren<MouseParallax>(includeInactive: true);
+            _canvas = GetComponent<Canvas>();
             _canvasGroup = GetComponent<CanvasGroup>();
             _rectTransform = GetComponent<RectTransform>();
             _childrenButtons = GetComponentsInChildren<AdvancedButton>(includeInactive: true);
@@ -85,7 +90,18 @@ namespace AlexH.AdvancedGUI
         [ContextMenu("Enable Page")]
         public void EnablePage()
         {
-            gameObject.SetActive(true);
+            if (!_canvas)
+            {
+                _canvas = GetComponent<Canvas>();
+            }
+            _canvas.enabled = true;
+
+            if (!_mouseParallax)
+            {
+                _mouseParallax = GetComponentInChildren<MouseParallax>(includeInactive: true);
+            }
+            
+            if (_mouseParallax) _mouseParallax.enabled = true;
             
             if (!_canvasGroup)
             {
@@ -100,6 +116,19 @@ namespace AlexH.AdvancedGUI
         [ContextMenu("Disable Page")]
         public void DisablePage()
         {
+            if (!_canvas)
+            {
+                _canvas = GetComponent<Canvas>();
+            }
+            _canvas.enabled = false;
+
+            if (!_mouseParallax)
+            {
+                _mouseParallax = GetComponentInChildren<MouseParallax>(includeInactive: true);
+            }
+            
+            if (_mouseParallax) _mouseParallax.enabled = false;
+            
             if (!_canvasGroup)
             {
                 _canvasGroup = GetComponent<CanvasGroup>();
@@ -108,7 +137,9 @@ namespace AlexH.AdvancedGUI
             _canvasGroup.alpha = 0f;
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
-            gameObject.SetActive(false);
+            _canvas.enabled = false;
+            
+            if (_mouseParallax) _mouseParallax.enabled = false;
         }
 
         #endregion
@@ -145,8 +176,6 @@ namespace AlexH.AdvancedGUI
 
         public void ActivatePage()
         {
-            gameObject.SetActive(true);
-            
             ActivateShortcuts();
             
             _canvasGroup.interactable = true;
@@ -200,11 +229,19 @@ namespace AlexH.AdvancedGUI
         public void PlayFadeOut(GradientType transitionDirection, float duration)
         {
             _currentSequence?.Kill();
-            _currentSequence = PageFadeOutSequence(transitionDirection, duration).OnComplete(() => gameObject.SetActive(false));
+            _currentSequence = PageFadeOutSequence(transitionDirection, duration).OnComplete(() =>
+            {
+                _canvas.enabled = false;
+                if (_mouseParallax) _mouseParallax.enabled = false;
+               
+            });
         }
         
         public void PlayFadeIn(GradientType transitionDirection, float duration)
         {
+            _canvas.enabled = true;
+            if (_mouseParallax) _mouseParallax.enabled = true;
+            
             _currentSequence?.Kill();
             _currentSequence = PageFadeInSequence(transitionDirection, duration);
         }
