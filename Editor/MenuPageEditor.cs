@@ -13,29 +13,40 @@ namespace AlexH.AdvancedGUI.Editor
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
-
-            MenuPage menuPageScript = (MenuPage)target;
-
+        
             GUILayout.Space(10);
-            
-            if (GUILayout.Button("Set current Position as Default"))
+                
+            GUI.backgroundColor = Color.white;
+            if (GUILayout.Button("Set current position as default"))
             {
-                menuPageScript.SetDefaultPosition();
+                foreach (Object target in targets)
+                {
+                    MenuPage menuPageScript = (MenuPage)target;
+                    menuPageScript.SetDefaultPosition();
+                }
+                
             }
-
             GUILayout.Space(10);
-            
             GUI.backgroundColor = Color.green;
-            if (GUILayout.Button("Enable Page", GUILayout.Height(50)))
+            if (GUILayout.Button("Enable", GUILayout.Height(50)))
             {
-                menuPageScript.EnablePage();
+                foreach (Object target in targets)
+                {
+                    MenuPage menuPageScript = (MenuPage)target;
+                    menuPageScript.EnablePage();
+                }
             }
             
             GUI.backgroundColor = Color.red;
-            if (GUILayout.Button("Disable Page" ,GUILayout.Height(50)))
+            if (GUILayout.Button("Disable",GUILayout.Height(50)))
             {
-                menuPageScript.DisablePage();
+                foreach (Object target in targets)
+                {
+                    MenuPage menuPageScript = (MenuPage)target;
+                    menuPageScript.DisablePage();
+                }
             }
+            
         }
     }
 }
