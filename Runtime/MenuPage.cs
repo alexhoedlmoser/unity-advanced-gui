@@ -78,6 +78,8 @@ namespace AlexH.AdvancedGUI
 
         #region Editor Methods
 
+#if UNITY_EDITOR
+
         [ContextMenu("Set new default Position")]
         public void SetDefaultPosition()
         {
@@ -87,7 +89,7 @@ namespace AlexH.AdvancedGUI
             }
             
             defaultPosition = _rectTransform.localPosition;
-
+            
             EditorUtility.SetDirty(this);
         }
         
@@ -165,6 +167,7 @@ namespace AlexH.AdvancedGUI
             EditorUtility.SetDirty(this);
         }
 
+#endif
         #endregion
         
         private Vector3 GetPositionDeltaFromGradient(GradientType gradientType)
