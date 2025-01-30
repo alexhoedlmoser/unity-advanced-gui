@@ -22,6 +22,7 @@ namespace AlexH.AdvancedGUI
         [SerializeField] private Image toggleFillImage;
         [SerializeField] private Image toggleKnobImage;
         [SerializeField] private TMP_Text valueText;
+        [SerializeField] private TMP_Text _notificationText;
 
         [Header("Input")] 
         [SerializeField] private string enabledText = "Enabled";
@@ -29,6 +30,9 @@ namespace AlexH.AdvancedGUI
         
         [Header("Animation Properties")]
         [SerializeField] private float toggleHoverHeightDelta;
+
+        [Header("Misc")] 
+        [SerializeField] private Color _notificationTint;
         
         private Sequence _currentToggleSequence;
         private Sequence _currentToggleFillSequence;
@@ -60,6 +64,23 @@ namespace AlexH.AdvancedGUI
             
             _currentToggleFillSequence?.Kill();
             _currentToggleFillSequence = ToggleFillSequence(isToggled);
+        }
+        
+        public void Set(bool value)
+        {
+            isToggled = value;
+            onToggleEvent.Invoke(isToggled);
+            
+            UpdateValueDisplay(isToggled);
+            
+            _currentToggleFillSequence?.Kill();
+            _currentToggleFillSequence = ToggleFillSequence(isToggled);
+        }
+        
+        public void SetNotification(string notification, Color notificationTint = default)
+        {
+            _notificationTint = notificationTint;
+            UpdateNotificationDisplay(notification);
         }
         
         protected override void Awake()
@@ -111,6 +132,22 @@ namespace AlexH.AdvancedGUI
             valueText.text = value ? enabledText : disabledText;
         }
 
+        private void UpdateNotificationDisplay(string notification)
+        {
+            if (!_notificationText) return;
+            
+            _notificationText.text = notification;
+
+            if (isHovered || isPressed)
+            {
+                _notificationText.color = hoverContentColor * _notificationTint;
+            }
+            else
+            {
+                _notificationText.color = defaultContentColor * _notificationTint;
+            }
+        }
+
         protected override void DefaultState()
         {
             base.DefaultState();
@@ -120,6 +157,11 @@ namespace AlexH.AdvancedGUI
 
             valueText.color = defaultContentColor;
             valueText.fontWeight = defaultFontWeight;
+
+            if (_notificationText)
+            {
+                _notificationText.color = defaultContentColor * _notificationTint;
+            }
             
             _currentToggleSequence?.Kill();
             _currentToggleSequence = ToggleToDefaultSequence();
@@ -138,6 +180,11 @@ namespace AlexH.AdvancedGUI
                 valueText.color = defaultContentColor;
                 valueText.fontWeight = defaultFontWeight;
             }
+            
+            if (_notificationText)
+            {
+                _notificationText.color = defaultContentColor * _notificationTint;
+            }
 
             if (toggleTransform)
             {
@@ -155,6 +202,11 @@ namespace AlexH.AdvancedGUI
             
             valueText.color = hoverContentColor;
             valueText.fontWeight = hoverFontWeight;
+            
+            if (_notificationText)
+            {
+                _notificationText.color = hoverContentColor * _notificationTint;
+            }
             
             _currentToggleSequence?.Kill();
             _currentToggleSequence = ToggleHoverSequence();
