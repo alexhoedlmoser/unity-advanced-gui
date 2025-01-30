@@ -1,6 +1,7 @@
 using System;
 using AlexH.AdvancedGUI;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using static AlexH.AdvancedGUI.Helper;
 
@@ -12,6 +13,9 @@ namespace AlexH
         [Header("References")]
         [SerializeField] private AdvancedNavButton[] navButtons;
         [SerializeField] private CanvasGroup[] menuPages;
+        
+        [Header("Events")]
+        [SerializeField] private UnityEvent[] onButtonSelectedEvents;
 
         [Header("Input Actions")]
         [SerializeField] private InputActionReference previousPageInputAction;
@@ -57,6 +61,9 @@ namespace AlexH
             }
             
             SwitchToPage(newNavIndex);
+
+            onButtonSelectedEvents[newNavIndex]?.Invoke();
+            
             _currentNavIndex = newNavIndex;
         }
 
