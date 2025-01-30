@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AlexH.AdvancedGUI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -62,7 +63,10 @@ namespace AlexH
             
             SwitchToPage(newNavIndex);
 
-            onButtonSelectedEvents[newNavIndex]?.Invoke();
+            if (onButtonSelectedEvents.ElementAtOrDefault(newNavIndex) != null)
+            {
+                onButtonSelectedEvents[newNavIndex]?.Invoke();
+            }
             
             _currentNavIndex = newNavIndex;
         }
