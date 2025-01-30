@@ -122,7 +122,7 @@ namespace AlexH.AdvancedGUI
             
             if (_disableGameObject)
             {
-                gameObject.SetActive(false);
+                gameObject.SetActive(true);
             }
             
             EditorUtility.SetDirty(this);
