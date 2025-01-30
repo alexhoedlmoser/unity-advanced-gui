@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 
 namespace AlexH.AdvancedGUI
@@ -35,7 +36,8 @@ namespace AlexH.AdvancedGUI
         [Header("References")]
         [SerializeField] private AdvancedButton backButton;
 
-        [Header("Settings")]
+        [Header("Settings")] 
+        [SerializeField] private bool _disableGameObject;
         [SerializeField] private bool _useParallaxEffect = true;
         [SerializeField] private Vector3 defaultPosition = Vector3.zero;
         [Tooltip("If false, uses actual Screen resolution")] 
@@ -85,6 +87,8 @@ namespace AlexH.AdvancedGUI
             }
             
             defaultPosition = _rectTransform.localPosition;
+
+            EditorUtility.SetDirty(this);
         }
         
         
@@ -115,6 +119,13 @@ namespace AlexH.AdvancedGUI
             _canvasGroup.alpha = 1f;
             _canvasGroup.interactable = true;
             _canvasGroup.blocksRaycasts = true;
+            
+            if (_disableGameObject)
+            {
+                gameObject.SetActive(false);
+            }
+            
+            EditorUtility.SetDirty(this);
         }
         
         [ContextMenu("Disable Page")]
@@ -145,6 +156,13 @@ namespace AlexH.AdvancedGUI
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
             _canvas.enabled = false;
+            
+            if (_disableGameObject)
+            {
+                gameObject.SetActive(false);
+            }
+            
+            EditorUtility.SetDirty(this);
         }
 
         #endregion
@@ -245,11 +263,21 @@ namespace AlexH.AdvancedGUI
             _currentSequence = PageFadeOutSequence(transitionDirection, duration).OnComplete(() =>
             {
                 _canvas.enabled = false;
+                
+                if (_disableGameObject)
+                {
+                    gameObject.SetActive(false);
+                }
             });
         }
         
         public void PlayFadeIn(GradientType transitionDirection, float duration)
         {
+            if (_disableGameObject)
+            {
+                gameObject.SetActive(true);
+            }
+            
             _canvas.enabled = true;
             
             if (_mouseParallax.Length > 0 && _useParallaxEffect)
