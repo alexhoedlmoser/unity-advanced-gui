@@ -80,7 +80,7 @@ namespace AlexH.AdvancedGUI
         
         public void SetNotification(string notification, Color notificationTint = default)
         {
-            if (notificationTint != defaultColor)
+            if (notificationTint != default)
             {
                 _notificationTint = notificationTint;
             }
