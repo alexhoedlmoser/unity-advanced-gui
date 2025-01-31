@@ -23,6 +23,7 @@ namespace AlexH
         [SerializeField] private InputActionReference nextPageInputAction;
 
         private int _currentNavIndex;
+        private int _defaultNavIndex;
 
         public AdvancedNavButton[] GetNavButtons => navButtons;
 
@@ -33,7 +34,31 @@ namespace AlexH
                 navButton.OnSelected += OnButtonSelectedHandler;
             }
             
-            StartCoroutine(navButtons[0].SelectButtonOnStartDelayed());
+            StartCoroutine(navButtons[_defaultNavIndex].SelectButtonOnStartDelayed());
+        }
+        
+        public void SetDefaultNavIndex(int index)
+        {
+            if (index < 0 || index >= navButtons.Length)
+            {
+                _defaultNavIndex = index;
+            }
+            else
+            {
+                _defaultNavIndex = 0;
+            }
+        }
+        
+        public void SelectButton(int buttonIndex)
+        {
+            if (buttonIndex < 0 || buttonIndex >= navButtons.Length)
+            {
+                navButtons[_defaultNavIndex].SelectButton();
+            }
+            else
+            {
+                navButtons[buttonIndex].SelectButton();
+            }
         }
 
         private void OnNextPageInput(InputAction.CallbackContext obj)
