@@ -1,5 +1,6 @@
 using DG.Tweening;
 using TMPro;
+using UnityEditor.Graphs;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -79,7 +80,8 @@ namespace AlexH.AdvancedGUI
         
         public void SetNotification(string notification, Color notificationTint = default)
         {
-            _notificationTint = notificationTint;
+            _notificationTint = notificationTint == default ? Color.white : notificationTint;
+
             UpdateNotificationDisplay(notification);
         }
         
