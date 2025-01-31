@@ -24,6 +24,8 @@ namespace AlexH
 
         private int _currentNavIndex;
 
+        public AdvancedNavButton[] GetNavButtons => navButtons;
+
         private void OnEnable()
         {
             foreach (AdvancedNavButton navButton in navButtons)
