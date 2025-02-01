@@ -16,16 +16,17 @@ namespace AlexH.AdvancedGUI
 
         public void TransitionToPage(MenuPage currentPage)
         {
-            if (!currentPage || !nextPage)
+            if (currentPage)
             {
-                return;
+                currentPage.PlayFadeOut(transitionDirection, transitionDuration);
+                currentPage.DeactivatePage();
             }
             
-            currentPage.PlayFadeOut(transitionDirection, transitionDuration);
-            nextPage.PlayFadeIn(transitionDirection, transitionDuration);
-
-            currentPage.DeactivatePage();
-            nextPage.ActivatePage();
+            if (nextPage)
+            {
+                nextPage.PlayFadeIn(transitionDirection, transitionDuration);
+                nextPage.ActivatePage();
+            }
         }
     }
     
