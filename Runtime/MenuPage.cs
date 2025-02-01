@@ -13,18 +13,19 @@ namespace AlexH.AdvancedGUI
         public MenuPage nextPage;
         public GradientType transitionDirection;
         public float transitionDuration = 0.5f;
+        public bool timeScaleIndependent = true;
 
         public void TransitionToPage(MenuPage currentPage)
         {
             if (currentPage)
             {
-                currentPage.PlayFadeOut(transitionDirection, transitionDuration);
+                currentPage.PlayFadeOut(transitionDirection, transitionDuration, timeScaleIndependent);
                 currentPage.DeactivatePage();
             }
             
             if (nextPage)
             {
-                nextPage.PlayFadeIn(transitionDirection, transitionDuration);
+                nextPage.PlayFadeIn(transitionDirection, transitionDuration, timeScaleIndependent);
                 nextPage.ActivatePage();
             }
         }
@@ -252,7 +253,7 @@ namespace AlexH.AdvancedGUI
                 .Join(_canvasGroup.DOFade(1f, duration));
         }
 
-        public void PlayFadeOut(GradientType transitionDirection, float duration)
+        public void PlayFadeOut(GradientType transitionDirection, float duration, bool timeScaleIndependent = false)
         {
             if (_mouseParallax.Length > 0)
             {
@@ -263,7 +264,7 @@ namespace AlexH.AdvancedGUI
             }
             
             _currentSequence?.Kill();
-            _currentSequence = PageFadeOutSequence(transitionDirection, duration).OnComplete(() =>
+            _currentSequence = PageFadeOutSequence(transitionDirection, duration).SetUpdate(timeScaleIndependent).OnComplete(() =>
             {
                 _canvas.enabled = false;
                 
@@ -274,7 +275,7 @@ namespace AlexH.AdvancedGUI
             });
         }
         
-        public void PlayFadeIn(GradientType transitionDirection, float duration)
+        public void PlayFadeIn(GradientType transitionDirection, float duration, bool timeScaleIndependent = false)
         {
             if (_disableGameObject)
             {
@@ -292,7 +293,7 @@ namespace AlexH.AdvancedGUI
             }
             
             _currentSequence?.Kill();
-            _currentSequence = PageFadeInSequence(transitionDirection, duration);
+            _currentSequence = PageFadeInSequence(transitionDirection, duration).SetUpdate(timeScaleIndependent);
         }
 
         public void PlayTransitionByIndex(int index)
