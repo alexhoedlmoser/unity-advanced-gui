@@ -76,11 +76,7 @@ namespace AlexH.AdvancedGUI
         {
             DeactivateShortcuts();
         }
-
-        #region Editor Methods
-
-#if UNITY_EDITOR
-
+        
         [ContextMenu("Set new default Position")]
         public void SetDefaultPosition()
         {
@@ -91,9 +87,11 @@ namespace AlexH.AdvancedGUI
             
             defaultPosition = _rectTransform.localPosition;
             
+#if UNITY_EDITOR
             EditorUtility.SetDirty(this);
+#endif
         }
-        
+
         
         [ContextMenu("Enable Page")]
         public void EnablePage()
@@ -128,7 +126,9 @@ namespace AlexH.AdvancedGUI
                 gameObject.SetActive(true);
             }
             
+#if UNITY_EDITOR
             EditorUtility.SetDirty(this);
+#endif
         }
         
         [ContextMenu("Disable Page")]
@@ -164,13 +164,12 @@ namespace AlexH.AdvancedGUI
             {
                 gameObject.SetActive(false);
             }
-            
+
+#if UNITY_EDITOR
             EditorUtility.SetDirty(this);
+#endif
         }
 
-#endif
-        #endregion
-        
         private Vector3 GetPositionDeltaFromGradient(GradientType gradientType)
         {
             Vector3 deltaVector = Vector3.zero;
