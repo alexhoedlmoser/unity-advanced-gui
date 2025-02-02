@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using AlexH.AdvancedGUI;
-using UnityEditor.Graphs;
 
 namespace AlexH.AdvancedGUI.Editor
 {
